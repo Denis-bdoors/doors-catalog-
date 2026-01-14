@@ -84,7 +84,7 @@
     .price .new:empty{display:none}
     .price .old:empty{display:none}
 
-    .actions{display:flex; gap:8px; margin-top:6px}
+    .actions{display:flex; gap:8px; margin-top:6px; flex-wrap:wrap}
     .actions .btn{padding:9px 10px; border-radius:12px; font-size:13px}
 
     /* Превью фото в админке */
@@ -95,7 +95,7 @@
     .thumb .cover{position:absolute; left:5px; top:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:950; line-height:1}
     .thumb .flag{position:absolute; left:6px; bottom:6px; font-size:10px; padding:3px 6px; border-radius:999px; background: rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14)}
 
-    dialog{border:1px solid var(--border); border-radius:18px; background:#0c1526; color: var(--text); box-shadow: var(--shadow); width:min(820px, 92vw);}
+    dialog{border:1px solid var(--border); border-radius:18px; background:#0c1526; color: var(--text); box-shadow: var(--shadow); width:min(860px, 92vw);}
     dialog::backdrop{background: rgba(0,0,0,.55)}
     .dialog-head{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border)}
     .dialog-title{font-weight:950}
@@ -236,6 +236,15 @@
 
       <div class="row">
         <div class="field">
+          <label for="editDesc">Описание</label>
+          <input id="editDesc" />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="row">
+        <div class="field">
           <label for="editPriceNew">Цена (со скидкой)</label>
           <input id="editPriceNew" />
         </div>
@@ -284,7 +293,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "doors_catalog_v7";
+    const STORAGE_KEY = "doors_catalog_v8";
     const ADMIN_PASSWORD = "admin123"; // поменяйте пароль
     const MAX_PHOTOS = 5;
 
@@ -329,6 +338,7 @@
     const editName = document.getElementById("editName");
     const editColor = document.getElementById("editColor");
     const editFinish = document.getElementById("editFinish");
+    const editDesc = document.getElementById("editDesc");
 
     const editPriceNew = document.getElementById("editPriceNew");
     const editPriceOld = document.getElementById("editPriceOld");
@@ -364,6 +374,15 @@
     let lbIndex = 0;
     let lbTouchStartX = null;
 
+    // dnd state
+    let dragFromId = null;
+
+    function uid(){
+      // crypto.randomUUID не везде поддерживается
+      if(typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
+      return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+    }
+
     function makeDemoItems(type, n=50){
       const isInterior = type === "interior";
       const baseNames = isInterior
@@ -390,7 +409,7 @@
         const oldP = isInterior ? (newP + 30) : (newP + 50);
 
         items.push({
-          id: crypto.randomUUID(),
+          id: uid(),
           name,
           color,
           finish,
@@ -413,10 +432,9 @@
     }
 
     function migrateItem(x){
-      // поддержка старого формата, где всё было в name
       const name = x?.name ?? "";
       return {
-        id: x?.id ?? crypto.randomUUID(),
+        id: x?.id ?? uid(),
         name,
         color: x?.color ?? "",
         finish: x?.finish ?? "",
@@ -718,10 +736,15 @@
 
       gridEl.innerHTML = "";
 
-      filtered.forEach((item, idx)=>{
+      for(let idx=0; idx<filtered.length; idx++){
+        const item = filtered[idx];
         const card = document.createElement("article");
-        const isSelected = selectedCardId === item.id;
-        card.className = "card" + (isSelected ? " selected" : "");
+        card.className = "card" + (selectedCardId === item.id ? " selected" : "");
+
+        if(isAdmin){
+          card.setAttribute("draggable", "true");
+          card.dataset.dragId = item.id;
+        }
 
         const imgs = Array.isArray(item.images) ? item.images : [];
         const hasImgs = imgs.length > 0;
@@ -733,12 +756,12 @@
 
         const controls = hasImgs && imgs.length > 1
           ? `<div class="gallery-controls">
-              <button class="gbtn" data-prev="${item.id}" type="button">‹</button>
-              <button class="gbtn" data-next="${item.id}" type="button">›</button>
+              <button class="gbtn" data-prev="${escapeHtml(item.id)}" type="button">‹</button>
+              <button class="gbtn" data-next="${escapeHtml(item.id)}" type="button">›</button>
             </div>`
           : "";
 
-        const inThumbs = (isSelected && imgs.length)
+        const inThumbs = (selectedCardId === item.id && imgs.length)
           ? `<div class="in-card-thumbs" data-thumbs="${escapeHtml(item.id)}">
               ${imgs.map((src,i)=>`<div class="in-thumb ${i===0?"active":""}" data-jump="${escapeHtml(item.id)}" data-index="${i}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.name||"Фото")}"></div>`).join("")}
             </div>`
@@ -767,6 +790,8 @@
                 <span class="new">${escapeHtml(item.priceNew || "")}</span>
               </div>
               <div class="actions ${isAdmin ? "" : "hidden"}">
+                <button class="btn secondary" data-move="up" data-id="${escapeHtml(item.id)}" type="button" title="Переместить выше">↑</button>
+                <button class="btn secondary" data-move="down" data-id="${escapeHtml(item.id)}" type="button" title="Переместить ниже">↓</button>
                 <button class="btn secondary" data-edit="${escapeHtml(item.id)}" type="button">Редактировать</button>
                 <button class="btn danger" data-del="${escapeHtml(item.id)}" type="button">Удалить</button>
               </div>
@@ -776,30 +801,18 @@
 
         card.addEventListener("click", (e)=>{
           const t = e.target;
-          if(t && (t.closest("button") || t.closest(".actions") || t.closest(".thumb") )) return;
+          if(t && (t.closest("button") || t.closest(".actions") || t.closest(".thumb"))) return;
           selectedCardId = item.id;
           render();
         });
 
         gridEl.appendChild(card);
-      });
-
-      // Снятие выделения кликом по пустому месту
-      document.addEventListener("click", onDocClickOnce, { once:true });
-      function onDocClickOnce(ev){
-        if(lightbox && !lightbox.classList.contains("hidden")){
-          document.addEventListener("click", onDocClickOnce, { once:true });
-          return;
-        }
-        const within = ev.target && ev.target.closest && ev.target.closest(".card");
-        if(!within && selectedCardId !== null){
-          selectedCardId = null;
-          render();
-        }else{
-          document.addEventListener("click", onDocClickOnce, { once:true });
-        }
       }
 
+      bindGridHandlers();
+    }
+
+    function bindGridHandlers(){
       // Галерея стрелками
       function updateGallery(id, dir){
         const el = gridEl.querySelector(`[data-gallery="${CSS.escape(id)}"]`);
@@ -815,8 +828,7 @@
         const img = el.querySelector("img.photo");
         if(img) img.src = item.images[i];
 
-        const dots = Array.from(el.querySelectorAll(".dot"));
-        dots.forEach((d, idx)=> d.classList.toggle("active", idx === i));
+        el.querySelectorAll(".dot").forEach((d, idx)=> d.classList.toggle("active", idx === i));
 
         const thumbsWrap = gridEl.querySelector(`[data-thumbs="${CSS.escape(id)}"]`);
         if(thumbsWrap){
@@ -833,7 +845,7 @@
         b.addEventListener("click", (e)=>{ e.stopPropagation(); updateGallery(b.getAttribute("data-next"), +1); });
       });
 
-      // Миниатюры: одинарный тап открывает полноэкранно выбранное фото
+      // Миниатюры: одинарный тап открывает полноэкранно
       gridEl.querySelectorAll("[data-jump]").forEach(th=>{
         th.addEventListener("click", (e)=>{
           e.stopPropagation();
@@ -847,7 +859,7 @@
       gridEl.querySelectorAll("[data-imgwrap]").forEach(w=>{
         w.addEventListener("click", (e)=>{
           const t = e.target;
-          if(t && t.closest && t.closest("button")) return; // не мешаем стрелкам ‹ ›
+          if(t && t.closest && t.closest("button")) return;
           e.stopPropagation();
           const id = w.getAttribute("data-imgwrap");
           const idx = parseInt(w.getAttribute("data-index") || "0", 10);
@@ -855,46 +867,108 @@
         });
       });
 
-      // Удаление/Редактирование (только админ)
-      if(isAdmin){
-        gridEl.querySelectorAll("[data-del]").forEach(btn=>{
-          btn.addEventListener("click", (e)=>{
-            e.stopPropagation();
-            const id = btn.getAttribute("data-del");
-            const list = getActiveList().filter(x => x.id !== id);
-            setActiveList(list);
-            if(selectedCardId === id) selectedCardId = null;
-            saveState();
-            render();
-          });
+      if(!isAdmin) return;
+
+      // Перемещение карточек ↑ ↓
+      gridEl.querySelectorAll("[data-move]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const dir = btn.getAttribute("data-move");
+          const id = btn.getAttribute("data-id");
+          const list = getActiveList();
+          const i = list.findIndex(x => x.id === id);
+          if(i < 0) return;
+          const j = dir === "up" ? i-1 : i+1;
+          if(j < 0 || j >= list.length) return;
+          const tmp = list[i];
+          list[i] = list[j];
+          list[j] = tmp;
+          setActiveList(list);
+          saveState();
+          render();
+        });
+      });
+
+      // Удаление
+      gridEl.querySelectorAll("[data-del]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const id = btn.getAttribute("data-del");
+          const list = getActiveList().filter(x => x.id !== id);
+          setActiveList(list);
+          if(selectedCardId === id) selectedCardId = null;
+          saveState();
+          render();
+        });
+      });
+
+      // Редактирование
+      gridEl.querySelectorAll("[data-edit]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const id = btn.getAttribute("data-edit");
+          const item = getItemById(id);
+          if(!item) return;
+
+          editingId = id;
+          editImages = Array.isArray(item.images) ? [...item.images].slice(0,MAX_PHOTOS) : [];
+
+          const meta = [item.name, item.color, item.finish].filter(Boolean).join(" • ");
+          editTitle.textContent = `Редактирование: ${meta || ""}`;
+
+          editName.value = item.name || "";
+          editColor.value = item.color || "";
+          editFinish.value = item.finish || "";
+          editDesc.value = item.desc || "";
+          editPriceNew.value = item.priceNew || "";
+          editPriceOld.value = item.priceOld || "";
+
+          editFilesEl.value = "";
+          refreshEditThumbs();
+          editDialog.showModal();
+        });
+      });
+
+      // Drag&Drop (ПК)
+      gridEl.querySelectorAll("article.card[draggable='true']").forEach(cardEl=>{
+        cardEl.addEventListener("dragstart", (e)=>{
+          dragFromId = cardEl.dataset.dragId || null;
+          try{ e.dataTransfer.setData("text/plain", dragFromId || ""); }catch(_){ }
+          e.dataTransfer.effectAllowed = "move";
         });
 
-        gridEl.querySelectorAll("[data-edit]").forEach(btn=>{
-          btn.addEventListener("click", (e)=>{
-            e.stopPropagation();
-            const id = btn.getAttribute("data-edit");
-            const item = getItemById(id);
-            if(!item) return;
-
-            editingId = id;
-            editImages = Array.isArray(item.images) ? [...item.images].slice(0,MAX_PHOTOS) : [];
-
-            const meta = [item.name, item.color, item.finish].filter(Boolean).join(" • ");
-            editTitle.textContent = `Редактирование: ${meta || ""}`;
-
-            editName.value = item.name || "";
-            editColor.value = item.color || "";
-            editFinish.value = item.finish || "";
-
-            editPriceNew.value = item.priceNew || "";
-            editPriceOld.value = item.priceOld || "";
-
-            editFilesEl.value = "";
-            refreshEditThumbs();
-            editDialog.showModal();
-          });
+        cardEl.addEventListener("dragover", (e)=>{
+          if(!dragFromId) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+          cardEl.classList.add("selected");
         });
-      }
+
+        cardEl.addEventListener("dragleave", ()=>{
+          cardEl.classList.remove("selected");
+        });
+
+        cardEl.addEventListener("drop", (e)=>{
+          e.preventDefault();
+          cardEl.classList.remove("selected");
+          const toId = cardEl.dataset.dragId || null;
+          const fromId = dragFromId || (function(){ try{ return e.dataTransfer.getData("text/plain"); }catch(_){ return null; } })();
+          dragFromId = null;
+          if(!fromId || !toId || fromId === toId) return;
+
+          const list = getActiveList();
+          const fromIdx = list.findIndex(x => x.id === fromId);
+          const toIdx = list.findIndex(x => x.id === toId);
+          if(fromIdx < 0 || toIdx < 0) return;
+
+          const [moved] = list.splice(fromIdx, 1);
+          const insertAt = fromIdx < toIdx ? toIdx - 1 : toIdx;
+          list.splice(insertAt, 0, moved);
+          setActiveList(list);
+          saveState();
+          render();
+        });
+      });
     }
 
     // tabs
@@ -948,6 +1022,16 @@
       }
     });
 
+    // Снятие выделения кликом по пустому месту (один глобальный слушатель)
+    document.addEventListener("click", (ev)=>{
+      if(lightbox && !lightbox.classList.contains("hidden")) return;
+      const within = ev.target && ev.target.closest && ev.target.closest(".card");
+      if(!within && selectedCardId !== null){
+        selectedCardId = null;
+        render();
+      }
+    });
+
     // add images
     addFilesEl.addEventListener("change", async ()=>{
       if(!isAdmin) return;
@@ -987,7 +1071,7 @@
       }
 
       const newItem = {
-        id: crypto.randomUUID(),
+        id: uid(),
         name,
         color,
         finish,
@@ -1081,6 +1165,7 @@
       item.name = (editName.value || "").trim();
       item.color = (editColor.value || "").trim();
       item.finish = (editFinish.value || "").trim();
+      item.desc = (editDesc.value || "").trim();
       item.priceNew = (editPriceNew.value || "").trim();
       item.priceOld = (editPriceOld.value || "").trim();
       item.images = [...editImages].slice(0, MAX_PHOTOS);
@@ -1109,6 +1194,14 @@
       const q = "экош";
       const ok = (itm.name+" "+itm.color+" "+itm.finish+" "+itm.desc+" "+itm.priceNew+" "+itm.priceOld).toLowerCase().includes(q);
       assert(ok === true, "Search matches finish");
+
+      // test 4: swap
+      const a = [{id:"1"},{id:"2"},{id:"3"}];
+      const i=1,j=2; const t=a[i]; a[i]=a[j]; a[j]=t;
+      assert(a.map(x=>x.id).join(",") === "1,3,2", "Swap move works");
+
+      // test 5: uid non-empty
+      assert(typeof uid() === "string" && uid().length > 6, "uid() returns a string");
 
       console.log("✅ tests ok");
     }
