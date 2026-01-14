@@ -23,6 +23,14 @@
     .wrap{max-width:1200px; margin:0 auto; padding:18px;}
     header{display:flex; gap:14px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; margin-bottom:14px;}
     .title h1{margin:0; font-size:20px; letter-spacing:.2px; user-select:none;}
+    .title .subtitle{margin:6px 0 0; font-size:13px; color:var(--muted); line-height:1.3}
+    .callBtn{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12); background: rgba(106,163,255,.18);
+      color: var(--text); text-decoration:none; font-weight:950; box-shadow: inset 0 0 0 1px rgba(106,163,255,.35);
+    }
+    .callBtn:active{transform:translateY(1px)}
+    .callBtn small{opacity:.85; font-weight:800}
+    .callBtn .dot{width:8px; height:8px; border-radius:999px; background: rgba(51,212,157,.9); box-shadow:0 0 0 4px rgba(51,212,157,.15)}
 
     .tabs{display:flex; gap:8px; flex-wrap:wrap; align-items:center; background: rgba(255,255,255,.03); border:1px solid var(--border); padding:8px; border-radius:999px;}
     .tab{border:0; cursor:pointer; padding:10px 14px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700;}
@@ -135,6 +143,11 @@
     <header>
       <div class="title">
         <h1 id="siteTitle">Каталог дверей</h1>
+        <p class="subtitle">Консультация и запись на замер</p>
+        <a class="callBtn" href="tel:89018099029" aria-label="Позвонить 8 901 809 9029">
+          <span class="dot" aria-hidden="true"></span>
+          Позвонить <small>8&nbsp;901&nbsp;809&nbsp;9029</small>
+        </a>
       </div>
 
       <div class="tabs" role="tablist" aria-label="Вкладки каталога">
@@ -888,7 +901,6 @@
           render();
         });
       });
-
       // Удаление
       gridEl.querySelectorAll("[data-del]").forEach(btn=>{
         btn.addEventListener("click", (e)=>{
@@ -911,7 +923,7 @@
           if(!item) return;
 
           editingId = id;
-          editImages = Array.isArray(item.images) ? [...item.images].slice(0,MAX_PHOTOS) : [];
+          editImages = Array.isArray(item.images) ? [...item.images].slice(0, MAX_PHOTOS) : [];
 
           const meta = [item.name, item.color, item.finish].filter(Boolean).join(" • ");
           editTitle.textContent = `Редактирование: ${meta || ""}`;
@@ -961,7 +973,7 @@
           const toIdx = list.findIndex(x => x.id === toId);
           if(fromIdx < 0 || toIdx < 0) return;
 
-          const [moved] = list.splice(fromIdx, 1);
+          const moved = list.splice(fromIdx, 1)[0];
           const insertAt = fromIdx < toIdx ? toIdx - 1 : toIdx;
           list.splice(insertAt, 0, moved);
           setActiveList(list);
@@ -1022,7 +1034,7 @@
       }
     });
 
-    // Снятие выделения кликом по пустому месту (один глобальный слушатель)
+    // Снятие выделения кликом по пустому месту
     document.addEventListener("click", (ev)=>{
       if(lightbox && !lightbox.classList.contains("hidden")) return;
       const within = ev.target && ev.target.closest && ev.target.closest(".card");
@@ -1181,26 +1193,21 @@
     }
 
     function runTests(){
-      // test 1: clamp
       const clamped = ["1","2","3","4","5","6"].slice(0, MAX_PHOTOS);
       assert(clamped.length === MAX_PHOTOS, "Clamp to MAX_PHOTOS");
 
-      // test 2: makeCover
       const cov = makeCover(["a","b","c"], 2);
       assert(cov[0] === "c" && cov.length === 3, "makeCover moves selected to front");
 
-      // test 3: search fields include color/finish
       const itm = { name:"A", color:"Белый", finish:"Экошпон", desc:"", priceNew:"", priceOld:"" };
       const q = "экош";
       const ok = (itm.name+" "+itm.color+" "+itm.finish+" "+itm.desc+" "+itm.priceNew+" "+itm.priceOld).toLowerCase().includes(q);
       assert(ok === true, "Search matches finish");
 
-      // test 4: swap
       const a = [{id:"1"},{id:"2"},{id:"3"}];
       const i=1,j=2; const t=a[i]; a[i]=a[j]; a[j]=t;
       assert(a.map(x=>x.id).join(",") === "1,3,2", "Swap move works");
 
-      // test 5: uid non-empty
       assert(typeof uid() === "string" && uid().length > 6, "uid() returns a string");
 
       console.log("✅ tests ok");
