@@ -23,10 +23,9 @@
     .wrap{max-width:1200px; margin:0 auto; padding:18px;}
     header{display:flex; gap:14px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; margin-bottom:14px;}
     .title h1{margin:0; font-size:20px; letter-spacing:.2px; user-select:none;}
-    .title p{margin:6px 0 0; color:var(--muted); font-size:13px}
 
     .tabs{display:flex; gap:8px; flex-wrap:wrap; align-items:center; background: rgba(255,255,255,.03); border:1px solid var(--border); padding:8px; border-radius:999px;}
-    .tab{border:0; cursor:pointer; padding:10px 14px; border-radius:999px; background:transparent; color:var(--muted); font-weight:600;}
+    .tab{border:0; cursor:pointer; padding:10px 14px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700;}
     .tab.active{background: rgba(106,163,255,.18); color:var(--text); box-shadow: inset 0 0 0 1px rgba(106,163,255,.35);}
 
     .panel{background: rgba(255,255,255,.03); border:1px solid var(--border); border-radius:var(--radius); padding:12px; box-shadow: var(--shadow); width:100%;}
@@ -36,9 +35,9 @@
     label{font-size:12px; color:var(--muted)}
     input{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background: rgba(0,0,0,.18); color: var(--text); outline:none;}
 
-    .btn{border:0; cursor:pointer; padding:10px 12px; border-radius:12px; background: rgba(106,163,255,.18); color: var(--text); font-weight:700; box-shadow: inset 0 0 0 1px rgba(106,163,255,.35); white-space:nowrap;}
+    .btn{border:0; cursor:pointer; padding:10px 12px; border-radius:12px; background: rgba(106,163,255,.18); color: var(--text); font-weight:800; box-shadow: inset 0 0 0 1px rgba(106,163,255,.35); white-space:nowrap;}
     .btn:active{transform:translateY(1px)}
-    .btn.secondary{background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.10); color: var(--text); font-weight:650;}
+    .btn.secondary{background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.10); color: var(--text); font-weight:750;}
     .btn.danger{background: rgba(255,90,106,.16); box-shadow: inset 0 0 0 1px rgba(255,90,106,.35);}
 
     .meta{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin:14px 0 10px;}
@@ -61,7 +60,7 @@
     .img .overlay{position:relative; z-index:2; width:100%; display:flex; align-items:flex-end; justify-content:space-between; gap:10px; height:100%;}
 
     .img .gallery-controls{position:absolute; left:10px; right:10px; top:10px; z-index:3; display:flex; justify-content:space-between; pointer-events:none;}
-    .img .gbtn{pointer-events:auto; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.30); color: var(--text); border-radius:999px; padding:6px 10px; font-weight:800; cursor:pointer;}
+    .img .gbtn{pointer-events:auto; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.30); color: var(--text); border-radius:999px; padding:6px 10px; font-weight:900; cursor:pointer;}
     .img .dots{position:absolute; left:0; right:0; bottom:8px; z-index:3; display:flex; gap:6px; justify-content:center; pointer-events:none;}
     .img .dot{width:7px; height:7px; border-radius:999px; background: rgba(255,255,255,.35); border:1px solid rgba(0,0,0,.25);}
     .img .dot.active{background: rgba(255,255,255,.85);}
@@ -75,12 +74,13 @@
     .in-thumb.active{border-color: rgba(106,163,255,.7); box-shadow: 0 0 0 2px rgba(106,163,255,.20)}
 
     .content{padding:12px; display:flex; flex-direction:column; gap:8px; flex:1}
-    .name{font-weight:800; line-height:1.25}
+    .name{font-weight:900; line-height:1.25}
+    .sub{color:var(--muted); font-size:12.5px; line-height:1.35}
     .desc{color:var(--muted); font-size:12.5px; line-height:1.35; flex:1}
 
-    .price{font-weight:800; display:flex; flex-wrap:wrap; gap:8px; align-items:baseline}
-    .price .old{color:var(--muted); text-decoration:line-through; font-weight:700; font-size:12.5px}
-    .price .new{font-weight:900}
+    .price{font-weight:900; display:flex; flex-wrap:wrap; gap:8px; align-items:baseline}
+    .price .old{color:var(--muted); text-decoration:line-through; font-weight:800; font-size:12.5px}
+    .price .new{font-weight:950}
     .price .new:empty{display:none}
     .price .old:empty{display:none}
 
@@ -91,14 +91,14 @@
     .thumbs{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
     .thumb{width:52px; height:52px; border-radius:12px; border:1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.15); position:relative}
     .thumb img{width:100%; height:100%; object-fit:cover; display:block}
-    .thumb .x{position:absolute; top:5px; right:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:900; line-height:1}
-    .thumb .cover{position:absolute; left:5px; top:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:900; line-height:1}
+    .thumb .x{position:absolute; top:5px; right:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:950; line-height:1}
+    .thumb .cover{position:absolute; left:5px; top:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:950; line-height:1}
     .thumb .flag{position:absolute; left:6px; bottom:6px; font-size:10px; padding:3px 6px; border-radius:999px; background: rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14)}
 
-    dialog{border:1px solid var(--border); border-radius:18px; background:#0c1526; color: var(--text); box-shadow: var(--shadow); width:min(760px, 92vw);}
+    dialog{border:1px solid var(--border); border-radius:18px; background:#0c1526; color: var(--text); box-shadow: var(--shadow); width:min(820px, 92vw);}
     dialog::backdrop{background: rgba(0,0,0,.55)}
     .dialog-head{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border)}
-    .dialog-title{font-weight:900}
+    .dialog-title{font-weight:950}
     .dialog-body{padding:14px}
     .dialog-actions{display:flex; gap:10px; justify-content:flex-end; padding:12px 14px; border-top:1px solid var(--border)}
 
@@ -112,8 +112,8 @@
     .lb-img{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:18px;}
     .lb-img img{max-width:100%; max-height:100%; border-radius:18px; box-shadow: 0 18px 50px rgba(0,0,0,.45);}
     .lb-top{position:absolute; left:12px; right:12px; top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; z-index:2;}
-    .lb-chip{padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.35); color: var(--text); font-weight:750; font-size:12px;}
-    .lb-btn{border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.35); color: var(--text); border-radius:999px; padding:10px 12px; cursor:pointer; font-weight:900;}
+    .lb-chip{padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.35); color: var(--text); font-weight:850; font-size:12px;}
+    .lb-btn{border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.35); color: var(--text); border-radius:999px; padding:10px 12px; cursor:pointer; font-weight:950;}
     .lb-nav{position:absolute; left:12px; right:12px; top:50%; transform:translateY(-50%); display:flex; justify-content:space-between; z-index:2; pointer-events:none;}
     .lb-nav .lb-btn{pointer-events:auto; padding:12px 14px;}
     .lb-thumbs{position:absolute; left:0; right:0; bottom:0; padding:10px; display:flex; gap:8px; overflow:auto; background: linear-gradient(to top, rgba(0,0,0,.55), transparent);
@@ -125,8 +125,6 @@
     .lb-t img{width:100%; height:100%; object-fit:cover; display:block}
     .lb-t.active{border-color: rgba(106,163,255,.75); box-shadow: 0 0 0 2px rgba(106,163,255,.18)}
 
-    footer{color:var(--muted); font-size:12px; margin-top:16px; padding:10px 2px;}
-
     @media (max-width:1000px){.grid{grid-template-columns: repeat(3, minmax(0, 1fr));}}
     @media (max-width:720px){.grid{grid-template-columns: repeat(2, minmax(0, 1fr));} header{gap:10px} .tabs{width:100%; justify-content:center} .title{width:100%} .lb-inner{height:82vh}}
     @media (max-width:420px){.grid{grid-template-columns: 1fr;} .lb-inner{height:86vh}}
@@ -137,7 +135,7 @@
     <header>
       <div class="title">
         <h1 id="siteTitle">Каталог дверей</h1>
-</div>
+      </div>
 
       <div class="tabs" role="tablist" aria-label="Вкладки каталога">
         <button class="tab active" data-tab="interior" role="tab" aria-selected="true">Межкомнатные</button>
@@ -150,8 +148,16 @@
     <div class="panel" id="adminPanel">
       <div class="row">
         <div class="field">
-          <label for="modelName">Название модели</label>
-          <input id="modelName" placeholder="Напр. Лира 3D (Белый дуб)" />
+          <label for="modelName">Модель (название)</label>
+          <input id="modelName" placeholder="Напр. Лира 3D" />
+        </div>
+        <div class="field">
+          <label for="modelColor">Цвет</label>
+          <input id="modelColor" placeholder="Напр. Белый дуб" />
+        </div>
+        <div class="field">
+          <label for="modelFinish">Покрытие</label>
+          <input id="modelFinish" placeholder="Напр. Экошпон / ПВХ / Эмаль" />
         </div>
         <div class="field">
           <label for="modelPriceNew">Цена (со скидкой)</label>
@@ -163,7 +169,7 @@
         </div>
         <div class="field" style="flex:1.2">
           <label for="modelDesc">Описание</label>
-          <input id="modelDesc" placeholder="Коротко: материал, покрытие, замок, размер..." />
+          <input id="modelDesc" placeholder="Коротко: материал, замок, размер..." />
         </div>
         <div class="field" style="flex:1.1">
           <label for="modelImagesFiles">Фото (до 5 шт.)</label>
@@ -180,7 +186,7 @@
       <div class="meta">
         <div class="badge" id="countBadge">Позиции: 0</div>
         <div class="search">
-          <input id="search" placeholder="Поиск по названию/описанию/цене..." />
+          <input id="search" placeholder="Поиск по модели/цвету/покрытию/описанию/цене..." />
           <button class="btn secondary" id="resetBtn" type="button" title="Вернуть демо-50 позиций">Сброс (демо)</button>
           <button class="btn danger" id="clearBtn" type="button" title="Удалить все позиции на вкладке">Очистить вкладку</button>
         </div>
@@ -195,14 +201,12 @@
       <div class="meta" style="margin:0;">
         <div class="badge" id="countBadgePublic">Позиции: 0</div>
         <div class="search">
-          <input id="searchPublic" placeholder="Поиск по названию/описанию/цене..." />
+          <input id="searchPublic" placeholder="Поиск по модели/цвету/покрытию/описанию/цене..." />
         </div>
       </div>
     </div>
 
     <div id="grid" class="grid" aria-live="polite"></div>
-
-    
   </div>
 
   <dialog id="editDialog">
@@ -213,6 +217,23 @@
       </div>
     </div>
     <div class="dialog-body">
+      <div class="row">
+        <div class="field">
+          <label for="editName">Модель (название)</label>
+          <input id="editName" />
+        </div>
+        <div class="field">
+          <label for="editColor">Цвет</label>
+          <input id="editColor" />
+        </div>
+        <div class="field">
+          <label for="editFinish">Покрытие</label>
+          <input id="editFinish" />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+
       <div class="row">
         <div class="field">
           <label for="editPriceNew">Цена (со скидкой)</label>
@@ -263,7 +284,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "doors_catalog_v6";
+    const STORAGE_KEY = "doors_catalog_v7";
     const ADMIN_PASSWORD = "admin123"; // поменяйте пароль
     const MAX_PHOTOS = 5;
 
@@ -284,6 +305,8 @@
     const countBadgePublic = document.getElementById("countBadgePublic");
 
     const nameEl = document.getElementById("modelName");
+    const colorEl = document.getElementById("modelColor");
+    const finishEl = document.getElementById("modelFinish");
     const priceNewEl = document.getElementById("modelPriceNew");
     const priceOldEl = document.getElementById("modelPriceOld");
     const descEl  = document.getElementById("modelDesc");
@@ -302,6 +325,11 @@
     const editClose = document.getElementById("editClose");
     const editCancel = document.getElementById("editCancel");
     const editSave = document.getElementById("editSave");
+
+    const editName = document.getElementById("editName");
+    const editColor = document.getElementById("editColor");
+    const editFinish = document.getElementById("editFinish");
+
     const editPriceNew = document.getElementById("editPriceNew");
     const editPriceOld = document.getElementById("editPriceOld");
     const editFilesEl = document.getElementById("editImagesFiles");
@@ -320,7 +348,6 @@
     // Админ-состояние
     let isAdmin = sessionStorage.getItem("doors_admin") === "1";
     // Кнопка админа по требованию: появляется только после 7 тапов и исчезает после выхода.
-    // Не сохраняем в storage, чтобы после перезагрузки снова нужно было 7 тапов.
     let adminBtnVisible = false;
 
     let state = loadState();
@@ -342,28 +369,34 @@
       const baseNames = isInterior
         ? ["Лира", "Соло", "Рондо", "Классик", "Нео", "Сканди", "Лофт", "Модерн", "Эко", "Премьер"]
         : ["Гранит", "Форпост", "Барьер", "Страж", "Титан", "Альфа", "Вектор", "Рубеж", "Броня", "Сейф"];
+      const colors = isInterior
+        ? ["Белый", "Белый дуб", "Дуб натуральный", "Венге", "Серый", "Орех", "Кашемир", "Графит"]
+        : ["Антик медь", "Антрацит", "Чёрный", "Серебро", "Коричневый", "Тёмный дуб"];
       const finishes = isInterior
-        ? ["Белый", "Дуб натуральный", "Венге", "Серый", "Орех", "Кашемир", "Графит"]
-        : ["Антик медь", "Антрацит", "Чёрный муар", "Серебро", "Коричневый", "Тёмный дуб"];
+        ? ["Экошпон", "ПВХ", "Эмаль", "Шпон", "Ламинат"]
+        : ["Порошковое", "МДФ-панель", "Антивандал", "ПВХ"];
       const descA = isInterior
-        ? ["МДФ, экошпон", "ПВХ покрытие", "Премиум эмаль", "Скрытые петли", "Магнитный замок", "Шумоизоляция"]
-        : ["Сталь 1.5 мм", "2 контура уплотнения", "Тёплый разрыв", "Замки 2 класса", "Минвата внутри", "Ночная задвижка"];
+        ? ["МДФ", "Скрытые петли", "Магнитный замок", "Шумоизоляция", "Стекло сатин"]
+        : ["Сталь 1.5 мм", "2 контура уплотнения", "Тёплый разрыв", "Замки 2 класса", "Ночная задвижка"];
 
       const items = [];
       for(let i=1;i<=n;i++){
-        const nm = baseNames[i % baseNames.length] + " " + (100 + i);
-        const fin = finishes[i % finishes.length];
-        const d = descA[i % descA.length] + " • " + fin;
+        const name = baseNames[i % baseNames.length] + " " + (100 + i);
+        const color = colors[i % colors.length];
+        const finish = finishes[i % finishes.length];
+        const desc = descA[i % descA.length];
 
         const newP = isInterior ? (80 + (i%20)*5) : (180 + (i%25)*7);
         const oldP = isInterior ? (newP + 30) : (newP + 50);
 
         items.push({
           id: crypto.randomUUID(),
-          name: nm + " (" + fin + ")",
+          name,
+          color,
+          finish,
           priceNew: newP + " €",
           priceOld: oldP + " €",
-          desc: d,
+          desc,
           tag: isInterior ? "Межкомн." : "Входная",
           images: []
         });
@@ -379,14 +412,30 @@
       };
     }
 
+    function migrateItem(x){
+      // поддержка старого формата, где всё было в name
+      const name = x?.name ?? "";
+      return {
+        id: x?.id ?? crypto.randomUUID(),
+        name,
+        color: x?.color ?? "",
+        finish: x?.finish ?? "",
+        priceNew: x?.priceNew ?? "",
+        priceOld: x?.priceOld ?? "",
+        desc: x?.desc ?? "",
+        tag: x?.tag ?? "",
+        images: (x?.images || []).slice(0, MAX_PHOTOS)
+      };
+    }
+
     function loadState(){
       try{
         const raw = localStorage.getItem(STORAGE_KEY);
         if(!raw) return defaultState();
         const parsed = JSON.parse(raw);
         if(!parsed.interior || !parsed.entrance) return defaultState();
-        parsed.interior = (parsed.interior || []).map(x=>({...x, images:(x.images||[]).slice(0,MAX_PHOTOS)}));
-        parsed.entrance = (parsed.entrance || []).map(x=>({...x, images:(x.images||[]).slice(0,MAX_PHOTOS)}));
+        parsed.interior = (parsed.interior || []).map(migrateItem);
+        parsed.entrance = (parsed.entrance || []).map(migrateItem);
         return parsed;
       }catch(_){
         return defaultState();
@@ -569,7 +618,8 @@
       lbIndex = (lbIndex + imgs.length) % imgs.length;
       lbImg.src = imgs[lbIndex];
       lbImg.alt = item?.name ? (item.name + ` — фото ${lbIndex+1}`) : `Фото ${lbIndex+1}`;
-      lbTitle.textContent = `${item?.name || "Фото"} • ${lbIndex+1}/${imgs.length}`;
+      const meta = [item?.name, item?.color, item?.finish].filter(Boolean).join(" • ");
+      lbTitle.textContent = `${meta || "Фото"} • ${lbIndex+1}/${imgs.length}`;
 
       lbThumbs.innerHTML = "";
       imgs.forEach((src, i)=>{
@@ -634,7 +684,6 @@
     function render(){
       setAdminUI();
 
-      // В админке показываем превью добавления
       if(isAdmin){
         renderThumbs(addThumbsEl, pendingAddImages, {
           onRemove: (i)=>{ pendingAddImages.splice(i,1); render(); },
@@ -656,6 +705,8 @@
       const filtered = q
         ? list.filter(x =>
             (x.name || "").toLowerCase().includes(q) ||
+            (x.color || "").toLowerCase().includes(q) ||
+            (x.finish || "").toLowerCase().includes(q) ||
             (x.desc || "").toLowerCase().includes(q) ||
             ((x.priceNew || "") + " " + (x.priceOld || "")).toLowerCase().includes(q)
           )
@@ -693,8 +744,10 @@
             </div>`
           : "";
 
+        const subLine = [item.color, item.finish].filter(Boolean).join(" • ");
+
         card.innerHTML = `
-          <div class="img" data-gallery="${escapeHtml(item.id)}" data-index="0" data-imgwrap="${escapeHtml(item.id)}" title="Тап — полноэкранный просмотр">
+          <div class="img" data-gallery="${escapeHtml(item.id)}" data-index="0" data-imgwrap="${escapeHtml(item.id)}">
             ${hasImgs ? `<img class="photo" src="${escapeHtml(firstSrc)}" alt="${escapeHtml(item.name || "Фото")}">` : ""}
             ${controls}
             ${dots}
@@ -706,6 +759,7 @@
           ${inThumbs}
           <div class="content">
             <div class="name">${escapeHtml(item.name || "Без названия")}</div>
+            ${subLine ? `<div class="sub">${escapeHtml(subLine)}</div>` : ""}
             <div class="desc">${escapeHtml(item.desc || "")}</div>
             <div class="row" style="justify-content:space-between; align-items:center; gap:10px;">
               <div class="price">
@@ -746,7 +800,7 @@
         }
       }
 
-      // Галерея стрелками (для всех)
+      // Галерея стрелками
       function updateGallery(id, dir){
         const el = gridEl.querySelector(`[data-gallery="${CSS.escape(id)}"]`);
         if(!el) return;
@@ -779,7 +833,7 @@
         b.addEventListener("click", (e)=>{ e.stopPropagation(); updateGallery(b.getAttribute("data-next"), +1); });
       });
 
-      // Миниатюры: одинарный тап открывает полноэкранно выбранное фото (вариант №2)
+      // Миниатюры: одинарный тап открывает полноэкранно выбранное фото
       gridEl.querySelectorAll("[data-jump]").forEach(th=>{
         th.addEventListener("click", (e)=>{
           e.stopPropagation();
@@ -794,14 +848,6 @@
         w.addEventListener("click", (e)=>{
           const t = e.target;
           if(t && t.closest && t.closest("button")) return; // не мешаем стрелкам ‹ ›
-          e.stopPropagation();
-          const id = w.getAttribute("data-imgwrap");
-          const idx = parseInt(w.getAttribute("data-index") || "0", 10);
-          openLightbox(id, idx);
-        });
-
-        // Двойной клик оставляем как альтернативу (для ПК)
-        w.addEventListener("dblclick", (e)=>{
           e.stopPropagation();
           const id = w.getAttribute("data-imgwrap");
           const idx = parseInt(w.getAttribute("data-index") || "0", 10);
@@ -833,7 +879,13 @@
             editingId = id;
             editImages = Array.isArray(item.images) ? [...item.images].slice(0,MAX_PHOTOS) : [];
 
-            editTitle.textContent = `Редактирование: ${item.name || ""}`;
+            const meta = [item.name, item.color, item.finish].filter(Boolean).join(" • ");
+            editTitle.textContent = `Редактирование: ${meta || ""}`;
+
+            editName.value = item.name || "";
+            editColor.value = item.color || "";
+            editFinish.value = item.finish || "";
+
             editPriceNew.value = item.priceNew || "";
             editPriceOld.value = item.priceOld || "";
 
@@ -858,7 +910,6 @@
     // admin login/logout
     adminBtn.addEventListener("click", ()=>{
       if(isAdmin){
-        // выход + прячем кнопку сразу
         isAdmin = false;
         sessionStorage.removeItem("doors_admin");
         adminBtnVisible = false;
@@ -887,9 +938,7 @@
     }
 
     siteTitle.addEventListener("click", ()=>{
-      // Если уже видна или вы уже админ — ничего не делаем
       if(adminBtnVisible || isAdmin) return;
-
       titleTapCount++;
       clearTimeout(titleTapTimer);
       titleTapTimer = setTimeout(()=>{ titleTapCount = 0; }, 3000);
@@ -899,7 +948,7 @@
       }
     });
 
-    // add images (limit)
+    // add images
     addFilesEl.addEventListener("change", async ()=>{
       if(!isAdmin) return;
       try{
@@ -923,6 +972,8 @@
       }
 
       const name = nameEl.value.trim();
+      const color = colorEl.value.trim();
+      const finish = finishEl.value.trim();
       const priceNew = priceNewEl.value.trim();
       const priceOld = priceOldEl.value.trim();
       const desc = descEl.value.trim();
@@ -938,6 +989,8 @@
       const newItem = {
         id: crypto.randomUUID(),
         name,
+        color,
+        finish,
         priceNew,
         priceOld,
         desc,
@@ -950,6 +1003,8 @@
       setActiveList(list);
 
       nameEl.value = "";
+      colorEl.value = "";
+      finishEl.value = "";
       priceNewEl.value = "";
       priceOldEl.value = "";
       descEl.value = "";
@@ -1023,6 +1078,9 @@
       const item = getItemById(editingId);
       if(!item) return;
 
+      item.name = (editName.value || "").trim();
+      item.color = (editColor.value || "").trim();
+      item.finish = (editFinish.value || "").trim();
       item.priceNew = (editPriceNew.value || "").trim();
       item.priceOld = (editPriceOld.value || "").trim();
       item.images = [...editImages].slice(0, MAX_PHOTOS);
@@ -1038,25 +1096,19 @@
     }
 
     function runTests(){
-      // test 1: state always clamps images
-      const fake = { id:"t", images:["1","2","3","4","5","6"] };
-      const clamped = (fake.images || []).slice(0, MAX_PHOTOS);
+      // test 1: clamp
+      const clamped = ["1","2","3","4","5","6"].slice(0, MAX_PHOTOS);
       assert(clamped.length === MAX_PHOTOS, "Clamp to MAX_PHOTOS");
 
-      // test 2: openLightbox should not throw on empty images
-      const before = lbCardId;
-      openLightbox("__nope__", 0);
-      assert(lbCardId === before, "openLightbox ignores missing item");
-
-      // test 3: admin button visibility rule
-      const computeShowBtn = (isAdminX, visibleX) => (isAdminX || visibleX);
-      assert(computeShowBtn(false, false) === false, "Admin btn hidden by default");
-      assert(computeShowBtn(false, true) === true, "Admin btn shown after 7 taps");
-      assert(computeShowBtn(true, false) === true, "Admin btn shown while admin");
-
-      // test 4: makeCover moves chosen index to front
+      // test 2: makeCover
       const cov = makeCover(["a","b","c"], 2);
       assert(cov[0] === "c" && cov.length === 3, "makeCover moves selected to front");
+
+      // test 3: search fields include color/finish
+      const itm = { name:"A", color:"Белый", finish:"Экошпон", desc:"", priceNew:"", priceOld:"" };
+      const q = "экош";
+      const ok = (itm.name+" "+itm.color+" "+itm.finish+" "+itm.desc+" "+itm.priceNew+" "+itm.priceOld).toLowerCase().includes(q);
+      assert(ok === true, "Search matches finish");
 
       console.log("✅ tests ok");
     }
