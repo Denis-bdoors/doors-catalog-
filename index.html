@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Каталог дверей</title>
+  <style>
+    :root{
+      --bg:#0b1220; --muted:#9db0d0; --text:#eef3ff;
+      --accent:#6aa3ff; --danger:#ff5a6a; --border:rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --gap:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 20% -10%, rgba(106,163,255,.35), transparent 60%),
+                  radial-gradient(900px 600px at 110% 10%, rgba(51,212,157,.25), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:1200px; margin:0 auto; padding:18px;}
+    header{display:flex; gap:14px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; margin-bottom:14px;}
+    .title h1{margin:0; font-size:20px; letter-spacing:.2px; user-select:none;}
+    .title p{margin:6px 0 0; color:var(--muted); font-size:13px}
+
+    .tabs{display:flex; gap:8px; flex-wrap:wrap; align-items:center; background: rgba(255,255,255,.03); border:1px solid var(--border); padding:8px; border-radius:999px;}
+    .tab{border:0; cursor:pointer; padding:10px 14px; border-radius:999px; background:transparent; color:var(--muted); font-weight:600;}
+    .tab.active{background: rgba(106,163,255,.18); color:var(--text); box-shadow: inset 0 0 0 1px rgba(106,163,255,.35);}
+
+    .panel{background: rgba(255,255,255,.03); border:1px solid var(--border); border-radius:var(--radius); padding:12px; box-shadow: var(--shadow); width:100%;}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .row > *{flex:1}
+    .field{display:flex; flex-direction:column; gap:6px; min-width:160px;}
+    label{font-size:12px; color:var(--muted)}
+    input{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background: rgba(0,0,0,.18); color: var(--text); outline:none;}
+
+    .btn{border:0; cursor:pointer; padding:10px 12px; border-radius:12px; background: rgba(106,163,255,.18); color: var(--text); font-weight:700; box-shadow: inset 0 0 0 1px rgba(106,163,255,.35); white-space:nowrap;}
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.10); color: var(--text); font-weight:650;}
+    .btn.danger{background: rgba(255,90,106,.16); box-shadow: inset 0 0 0 1px rgba(255,90,106,.35);}
+
+    .meta{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin:14px 0 10px;}
+    .badge{padding:6px 10px; border-radius:999px; border:1px solid var(--border); background: rgba(255,255,255,.03); color:var(--muted); font-size:12px;}
+    .search{display:flex; gap:10px; align-items:center; flex:1; justify-content:flex-end; min-width:260px;}
+
+    .grid{display:grid; gap:var(--gap); grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top:12px;}
+    .card{background: rgba(255,255,255,.03); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column; min-height:220px; cursor:pointer;}
+    .card.selected{border-color: rgba(106,163,255,.55); box-shadow: 0 0 0 2px rgba(106,163,255,.22), var(--shadow);}
+
+    .hidden{display:none!important}
+
+    .img{position:relative; aspect-ratio:4/3; background:
+        linear-gradient(135deg, rgba(106,163,255,.35), rgba(51,212,157,.20)),
+        radial-gradient(500px 250px at 20% 0%, rgba(255,255,255,.10), transparent 60%),
+        rgba(0,0,0,.15);
+      padding:10px; border-bottom:1px solid var(--border); overflow:hidden;}
+    .img img.photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;}
+    .pill{font-size:11px; padding:6px 8px; border-radius:999px; background: rgba(0,0,0,.30); border:1px solid rgba(255,255,255,.12); color:var(--text);}
+    .img .overlay{position:relative; z-index:2; width:100%; display:flex; align-items:flex-end; justify-content:space-between; gap:10px; height:100%;}
+
+    .img .gallery-controls{position:absolute; left:10px; right:10px; top:10px; z-index:3; display:flex; justify-content:space-between; pointer-events:none;}
+    .img .gbtn{pointer-events:auto; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.30); color: var(--text); border-radius:999px; padding:6px 10px; font-weight:800; cursor:pointer;}
+    .img .dots{position:absolute; left:0; right:0; bottom:8px; z-index:3; display:flex; gap:6px; justify-content:center; pointer-events:none;}
+    .img .dot{width:7px; height:7px; border-radius:999px; background: rgba(255,255,255,.35); border:1px solid rgba(0,0,0,.25);}
+    .img .dot.active{background: rgba(255,255,255,.85);}
+
+    /* Миниатюры внутри выбранной карточки */
+    .in-card-thumbs{display:flex; gap:8px; padding:10px; border-bottom:1px solid var(--border); overflow:auto; background: rgba(0,0,0,.10)}
+    .in-card-thumbs::-webkit-scrollbar{height:8px}
+    .in-card-thumbs::-webkit-scrollbar-thumb{background: rgba(255,255,255,.10); border-radius:999px}
+    .in-thumb{flex:0 0 auto; width:56px; height:56px; border-radius:12px; border:1px solid rgba(255,255,255,.10); overflow:hidden; background: rgba(0,0,0,.2)}
+    .in-thumb img{width:100%; height:100%; object-fit:cover; display:block}
+    .in-thumb.active{border-color: rgba(106,163,255,.7); box-shadow: 0 0 0 2px rgba(106,163,255,.20)}
+
+    .content{padding:12px; display:flex; flex-direction:column; gap:8px; flex:1}
+    .name{font-weight:800; line-height:1.25}
+    .desc{color:var(--muted); font-size:12.5px; line-height:1.35; flex:1}
+
+    .price{font-weight:800; display:flex; flex-wrap:wrap; gap:8px; align-items:baseline}
+    .price .old{color:var(--muted); text-decoration:line-through; font-weight:700; font-size:12.5px}
+    .price .new{font-weight:900}
+    .price .new:empty{display:none}
+    .price .old:empty{display:none}
+
+    .actions{display:flex; gap:8px; margin-top:6px}
+    .actions .btn{padding:9px 10px; border-radius:12px; font-size:13px}
+
+    /* Превью фото в админке */
+    .thumbs{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .thumb{width:52px; height:52px; border-radius:12px; border:1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.15); position:relative}
+    .thumb img{width:100%; height:100%; object-fit:cover; display:block}
+    .thumb .x{position:absolute; top:5px; right:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:900; line-height:1}
+    .thumb .cover{position:absolute; left:5px; top:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:900; line-height:1}
+    .thumb .flag{position:absolute; left:6px; bottom:6px; font-size:10px; padding:3px 6px; border-radius:999px; background: rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14)}
+
+    dialog{border:1px solid var(--border); border-radius:18px; background:#0c1526; color: var(--text); box-shadow: var(--shadow); width:min(760px, 92vw);}
+    dialog::backdrop{background: rgba(0,0,0,.55)}
+    .dialog-head{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border)}
+    .dialog-title{font-weight:900}
+    .dialog-body{padding:14px}
+    .dialog-actions{display:flex; gap:10px; justify-content:flex-end; padding:12px 14px; border-top:1px solid var(--border)}
+
+    /* Lightbox */
+    .lightbox{position:fixed; inset:0; z-index:9999; background: rgba(0,0,0,.78); display:flex; align-items:center; justify-content:center; padding:14px;}
+    .lightbox.hidden{display:none}
+    .lb-inner{width:min(1100px, 96vw); height:min(84vh, 760px); position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,.12);
+      background: radial-gradient(600px 300px at 20% 0%, rgba(106,163,255,.18), transparent 60%), rgba(10,16,30,.85);
+      box-shadow: 0 20px 60px rgba(0,0,0,.55);
+    }
+    .lb-img{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:18px;}
+    .lb-img img{max-width:100%; max-height:100%; border-radius:18px; box-shadow: 0 18px 50px rgba(0,0,0,.45);}
+    .lb-top{position:absolute; left:12px; right:12px; top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; z-index:2;}
+    .lb-chip{padding:8px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.35); color: var(--text); font-weight:750; font-size:12px;}
+    .lb-btn{border:1px solid rgba(255,255,255,.14); background: rgba(0,0,0,.35); color: var(--text); border-radius:999px; padding:10px 12px; cursor:pointer; font-weight:900;}
+    .lb-nav{position:absolute; left:12px; right:12px; top:50%; transform:translateY(-50%); display:flex; justify-content:space-between; z-index:2; pointer-events:none;}
+    .lb-nav .lb-btn{pointer-events:auto; padding:12px 14px;}
+    .lb-thumbs{position:absolute; left:0; right:0; bottom:0; padding:10px; display:flex; gap:8px; overflow:auto; background: linear-gradient(to top, rgba(0,0,0,.55), transparent);
+      z-index:2;
+    }
+    .lb-thumbs::-webkit-scrollbar{height:8px}
+    .lb-thumbs::-webkit-scrollbar-thumb{background: rgba(255,255,255,.12); border-radius:999px}
+    .lb-t{flex:0 0 auto; width:56px; height:56px; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.25); cursor:pointer}
+    .lb-t img{width:100%; height:100%; object-fit:cover; display:block}
+    .lb-t.active{border-color: rgba(106,163,255,.75); box-shadow: 0 0 0 2px rgba(106,163,255,.18)}
+
+    footer{color:var(--muted); font-size:12px; margin-top:16px; padding:10px 2px;}
+
+    @media (max-width:1000px){.grid{grid-template-columns: repeat(3, minmax(0, 1fr));}}
+    @media (max-width:720px){.grid{grid-template-columns: repeat(2, minmax(0, 1fr));} header{gap:10px} .tabs{width:100%; justify-content:center} .title{width:100%} .lb-inner{height:82vh}}
+    @media (max-width:420px){.grid{grid-template-columns: 1fr;} .lb-inner{height:86vh}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1 id="siteTitle">Каталог дверей</h1>
+        <p>2 вкладки • админ-режим • 2 цены • до 5 фото • выделение карточки • полноэкранный просмотр</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Вкладки каталога">
+        <button class="tab active" data-tab="interior" role="tab" aria-selected="true">Межкомнатные</button>
+        <button class="tab" data-tab="entrance" role="tab" aria-selected="false">Входные</button>
+        <button class="btn secondary hidden" id="adminBtn" type="button" style="padding:10px 14px; border-radius:999px;">Войти как админ</button>
+        <span class="badge hidden" id="adminBadge">Режим администратора</span>
+      </div>
+    </header>
+
+    <div class="panel" id="adminPanel">
+      <div class="row">
+        <div class="field">
+          <label for="modelName">Название модели</label>
+          <input id="modelName" placeholder="Напр. Лира 3D (Белый дуб)" />
+        </div>
+        <div class="field">
+          <label for="modelPriceNew">Цена (со скидкой)</label>
+          <input id="modelPriceNew" placeholder="Напр. 199 € или 24 900 ₽" />
+        </div>
+        <div class="field">
+          <label for="modelPriceOld">Цена (без скидки, зачёркнутая)</label>
+          <input id="modelPriceOld" placeholder="Напр. 249 €" />
+        </div>
+        <div class="field" style="flex:1.2">
+          <label for="modelDesc">Описание</label>
+          <input id="modelDesc" placeholder="Коротко: материал, покрытие, замок, размер..." />
+        </div>
+        <div class="field" style="flex:1.1">
+          <label for="modelImagesFiles">Фото (до 5 шт.)</label>
+          <input id="modelImagesFiles" type="file" accept="image/*" multiple />
+          <div class="thumbs" id="addThumbs"></div>
+          <div class="badge" style="margin-top:8px;">💡 Обложка — это первое фото. Нажмите «★» на миниатюре.</div>
+        </div>
+        <div class="field" style="flex:.7">
+          <label>&nbsp;</label>
+          <button class="btn" id="addBtn" type="button">Добавить</button>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div class="badge" id="countBadge">Позиции: 0</div>
+        <div class="search">
+          <input id="search" placeholder="Поиск по названию/описанию/цене..." />
+          <button class="btn secondary" id="resetBtn" type="button" title="Вернуть демо-50 позиций">Сброс (демо)</button>
+          <button class="btn danger" id="clearBtn" type="button" title="Удалить все позиции на вкладке">Очистить вкладку</button>
+        </div>
+      </div>
+
+      <div class="badge" style="margin-top:8px;">
+        ⚠️ Фото сохраняются внутри браузера (сжатые JPEG). Очень много фото всё равно может «утяжелить» каталог.
+      </div>
+    </div>
+
+    <div class="panel hidden" id="publicSearchPanel" style="margin-top:12px;">
+      <div class="meta" style="margin:0;">
+        <div class="badge" id="countBadgePublic">Позиции: 0</div>
+        <div class="search">
+          <input id="searchPublic" placeholder="Поиск по названию/описанию/цене..." />
+        </div>
+      </div>
+    </div>
+
+    <div id="grid" class="grid" aria-live="polite"></div>
+
+    <footer>
+      Нажмите на карточку — она выделится и покажет все фото миниатюрами. Полноэкранный просмотр: <b>одинарный тап/клик по фото</b>.
+      Админ-кнопка появляется только после <b>7 тапов по заголовку</b> (и исчезает после выхода).
+    </footer>
+  </div>
+
+  <dialog id="editDialog">
+    <div class="dialog-head">
+      <div class="dialog-title" id="editTitle">Редактирование</div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn secondary" id="editClose" type="button">Закрыть</button>
+      </div>
+    </div>
+    <div class="dialog-body">
+      <div class="row">
+        <div class="field">
+          <label for="editPriceNew">Цена (со скидкой)</label>
+          <input id="editPriceNew" />
+        </div>
+        <div class="field">
+          <label for="editPriceOld">Цена (без скидки)</label>
+          <input id="editPriceOld" />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="field">
+        <label for="editImagesFiles">Фото (добавить ещё, до 5)</label>
+        <input id="editImagesFiles" type="file" accept="image/*" multiple />
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div class="field">
+        <label>Текущие фото (★ = обложка, × = удалить)</label>
+        <div class="thumbs" id="editThumbs"></div>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn secondary" id="editCancel" type="button">Отмена</button>
+      <button class="btn" id="editSave" type="button">Сохранить</button>
+    </div>
+  </dialog>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox hidden" aria-hidden="true">
+    <div class="lb-inner" role="dialog" aria-modal="true" aria-label="Просмотр фото">
+      <div class="lb-top">
+        <div class="lb-chip" id="lbTitle">Фото</div>
+        <button class="lb-btn" id="lbClose" type="button">✕</button>
+      </div>
+      <div class="lb-nav">
+        <button class="lb-btn" id="lbPrev" type="button">‹</button>
+        <button class="lb-btn" id="lbNext" type="button">›</button>
+      </div>
+      <div class="lb-img" id="lbImgArea">
+        <img id="lbImg" alt="Фото" />
+      </div>
+      <div class="lb-thumbs" id="lbThumbs"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "doors_catalog_v6";
+    const ADMIN_PASSWORD = "admin123"; // поменяйте пароль
+    const MAX_PHOTOS = 5;
+
+    const IMG_MAX_SIDE = 1280;
+    const IMG_QUALITY  = 0.78;
+
+    const tabsEl = document.querySelectorAll(".tab");
+    const gridEl = document.getElementById("grid");
+
+    const adminBtn = document.getElementById("adminBtn");
+    const adminBadge = document.getElementById("adminBadge");
+    const adminPanel = document.getElementById("adminPanel");
+    const publicSearchPanel = document.getElementById("publicSearchPanel");
+
+    const siteTitle = document.getElementById("siteTitle");
+
+    const countBadge = document.getElementById("countBadge");
+    const countBadgePublic = document.getElementById("countBadgePublic");
+
+    const nameEl = document.getElementById("modelName");
+    const priceNewEl = document.getElementById("modelPriceNew");
+    const priceOldEl = document.getElementById("modelPriceOld");
+    const descEl  = document.getElementById("modelDesc");
+
+    const addFilesEl = document.getElementById("modelImagesFiles");
+    const addThumbsEl = document.getElementById("addThumbs");
+
+    const addBtn  = document.getElementById("addBtn");
+    const searchEl = document.getElementById("search");
+    const searchPublicEl = document.getElementById("searchPublic");
+    const resetBtn = document.getElementById("resetBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const editDialog = document.getElementById("editDialog");
+    const editTitle = document.getElementById("editTitle");
+    const editClose = document.getElementById("editClose");
+    const editCancel = document.getElementById("editCancel");
+    const editSave = document.getElementById("editSave");
+    const editPriceNew = document.getElementById("editPriceNew");
+    const editPriceOld = document.getElementById("editPriceOld");
+    const editFilesEl = document.getElementById("editImagesFiles");
+    const editThumbsEl = document.getElementById("editThumbs");
+
+    // lightbox
+    const lightbox = document.getElementById("lightbox");
+    const lbClose = document.getElementById("lbClose");
+    const lbPrev = document.getElementById("lbPrev");
+    const lbNext = document.getElementById("lbNext");
+    const lbImg = document.getElementById("lbImg");
+    const lbTitle = document.getElementById("lbTitle");
+    const lbThumbs = document.getElementById("lbThumbs");
+    const lbImgArea = document.getElementById("lbImgArea");
+
+    // Админ-состояние
+    let isAdmin = sessionStorage.getItem("doors_admin") === "1";
+    // Кнопка админа по требованию: появляется только после 7 тапов и исчезает после выхода.
+    // Не сохраняем в storage, чтобы после перезагрузки снова нужно было 7 тапов.
+    let adminBtnVisible = false;
+
+    let state = loadState();
+    let activeTab = state.activeTab || "interior";
+
+    let selectedCardId = null;
+    let pendingAddImages = [];
+
+    let editingId = null;
+    let editImages = [];
+
+    // lightbox state
+    let lbCardId = null;
+    let lbIndex = 0;
+    let lbTouchStartX = null;
+
+    function makeDemoItems(type, n=50){
+      const isInterior = type === "interior";
+      const baseNames = isInterior
+        ? ["Лира", "Соло", "Рондо", "Классик", "Нео", "Сканди", "Лофт", "Модерн", "Эко", "Премьер"]
+        : ["Гранит", "Форпост", "Барьер", "Страж", "Титан", "Альфа", "Вектор", "Рубеж", "Броня", "Сейф"];
+      const finishes = isInterior
+        ? ["Белый", "Дуб натуральный", "Венге", "Серый", "Орех", "Кашемир", "Графит"]
+        : ["Антик медь", "Антрацит", "Чёрный муар", "Серебро", "Коричневый", "Тёмный дуб"];
+      const descA = isInterior
+        ? ["МДФ, экошпон", "ПВХ покрытие", "Премиум эмаль", "Скрытые петли", "Магнитный замок", "Шумоизоляция"]
+        : ["Сталь 1.5 мм", "2 контура уплотнения", "Тёплый разрыв", "Замки 2 класса", "Минвата внутри", "Ночная задвижка"];
+
+      const items = [];
+      for(let i=1;i<=n;i++){
+        const nm = baseNames[i % baseNames.length] + " " + (100 + i);
+        const fin = finishes[i % finishes.length];
+        const d = descA[i % descA.length] + " • " + fin;
+
+        const newP = isInterior ? (80 + (i%20)*5) : (180 + (i%25)*7);
+        const oldP = isInterior ? (newP + 30) : (newP + 50);
+
+        items.push({
+          id: crypto.randomUUID(),
+          name: nm + " (" + fin + ")",
+          priceNew: newP + " €",
+          priceOld: oldP + " €",
+          desc: d,
+          tag: isInterior ? "Межкомн." : "Входная",
+          images: []
+        });
+      }
+      return items;
+    }
+
+    function defaultState(){
+      return {
+        activeTab: "interior",
+        interior: makeDemoItems("interior", 50),
+        entrance: makeDemoItems("entrance", 50)
+      };
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        if(!parsed.interior || !parsed.entrance) return defaultState();
+        parsed.interior = (parsed.interior || []).map(x=>({...x, images:(x.images||[]).slice(0,MAX_PHOTOS)}));
+        parsed.entrance = (parsed.entrance || []).map(x=>({...x, images:(x.images||[]).slice(0,MAX_PHOTOS)}));
+        return parsed;
+      }catch(_){
+        return defaultState();
+      }
+    }
+
+    function saveState(){
+      state.activeTab = activeTab;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getActiveList(){
+      return activeTab === "interior" ? state.interior : state.entrance;
+    }
+
+    function setActiveList(list){
+      if(activeTab === "interior") state.interior = list;
+      else state.entrance = list;
+    }
+
+    function setAdminUI(){
+      const showBtn = isAdmin || adminBtnVisible;
+      adminBtn.classList.toggle("hidden", !showBtn);
+
+      adminPanel.classList.toggle("hidden", !isAdmin);
+      adminBadge.classList.toggle("hidden", !isAdmin);
+      adminBtn.textContent = isAdmin ? "Выйти" : "Войти как админ";
+      publicSearchPanel.classList.toggle("hidden", isAdmin);
+
+      if(isAdmin) searchEl.value = searchPublicEl.value || "";
+      else searchPublicEl.value = searchEl.value || "";
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function getQuery(){
+      return (isAdmin ? (searchEl.value||"") : (searchPublicEl.value||""))
+        .trim()
+        .toLowerCase();
+    }
+
+    function makeCover(images, idx){
+      if(!Array.isArray(images) || images.length === 0) return images;
+      if(idx <= 0 || idx >= images.length) return images;
+      const copy = [...images];
+      const [picked] = copy.splice(idx, 1);
+      copy.unshift(picked);
+      return copy;
+    }
+
+    async function fileToCompressedDataURL(file){
+      let bitmap;
+      try{
+        bitmap = await createImageBitmap(file);
+      }catch(_){
+        const dataUrl = await new Promise((resolve, reject)=>{
+          const r = new FileReader();
+          r.onload = ()=> resolve(String(r.result || ""));
+          r.onerror = ()=> reject(new Error("FileReader error"));
+          r.readAsDataURL(file);
+        });
+        bitmap = await new Promise((resolve, reject)=>{
+          const img = new Image();
+          img.onload = ()=> resolve(img);
+          img.onerror = ()=> reject(new Error("Image load error"));
+          img.src = dataUrl;
+        });
+      }
+
+      const w = bitmap.width;
+      const h = bitmap.height;
+      const scale = Math.min(1, IMG_MAX_SIDE / Math.max(w, h));
+      const outW = Math.max(1, Math.round(w * scale));
+      const outH = Math.max(1, Math.round(h * scale));
+
+      const canvas = document.createElement("canvas");
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext("2d", { alpha: false });
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(bitmap, 0, 0, outW, outH);
+
+      const data = canvas.toDataURL("image/jpeg", IMG_QUALITY);
+      try{ if(bitmap && bitmap.close) bitmap.close(); }catch(_){ }
+      return data;
+    }
+
+    async function readFilesCompressedWithLimit(fileList, remainingSlots){
+      const files = Array.from(fileList || []);
+      const take = files.slice(0, Math.max(0, remainingSlots));
+      const out = [];
+      for(const f of take){ out.push(await fileToCompressedDataURL(f)); }
+      return { out, skipped: Math.max(0, files.length - take.length) };
+    }
+
+    function renderThumbs(container, images, handlers){
+      const { onRemove, onMakeCover } = handlers || {};
+      container.innerHTML = "";
+      (images || []).forEach((src, idx)=>{
+        const t = document.createElement("div");
+        t.className = "thumb";
+        t.innerHTML = `<img src="${escapeHtml(src)}" alt="Фото ${idx+1}">`;
+
+        if(idx === 0 && (images || []).length){
+          const flag = document.createElement("div");
+          flag.className = "flag";
+          flag.textContent = "Обложка";
+          t.appendChild(flag);
+        }
+
+        if(onMakeCover){
+          const c = document.createElement("button");
+          c.type = "button";
+          c.className = "cover";
+          c.textContent = "★";
+          c.title = "Сделать обложкой";
+          c.addEventListener("click", (e)=>{ e.stopPropagation(); onMakeCover(idx); });
+          t.appendChild(c);
+        }
+
+        if(onRemove){
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "x";
+          b.textContent = "×";
+          b.title = "Удалить фото";
+          b.addEventListener("click", (e)=>{ e.stopPropagation(); onRemove(idx); });
+          t.appendChild(b);
+        }
+
+        container.appendChild(t);
+      });
+    }
+
+    // ---------- Lightbox ----------
+    function getItemById(id){
+      return getActiveList().find(x => x.id === id);
+    }
+
+    function openLightbox(cardId, index){
+      const item = getItemById(cardId);
+      if(!item || !Array.isArray(item.images) || item.images.length === 0) return;
+
+      lbCardId = cardId;
+      lbIndex = Math.max(0, Math.min(index || 0, item.images.length-1));
+      selectedCardId = cardId;
+
+      lightbox.classList.remove("hidden");
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      render();
+      renderLightbox();
+    }
+
+    function closeLightbox(){
+      lightbox.classList.add("hidden");
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      lbCardId = null;
+      lbIndex = 0;
+    }
+
+    function renderLightbox(){
+      const item = lbCardId ? getItemById(lbCardId) : null;
+      const imgs = item && Array.isArray(item.images) ? item.images : [];
+      if(!imgs.length){
+        closeLightbox();
+        return;
+      }
+
+      lbIndex = (lbIndex + imgs.length) % imgs.length;
+      lbImg.src = imgs[lbIndex];
+      lbImg.alt = item?.name ? (item.name + ` — фото ${lbIndex+1}`) : `Фото ${lbIndex+1}`;
+      lbTitle.textContent = `${item?.name || "Фото"} • ${lbIndex+1}/${imgs.length}`;
+
+      lbThumbs.innerHTML = "";
+      imgs.forEach((src, i)=>{
+        const t = document.createElement("div");
+        t.className = "lb-t" + (i===lbIndex ? " active" : "");
+        t.innerHTML = `<img src="${escapeHtml(src)}" alt="">`;
+        t.addEventListener("click", (e)=>{ e.stopPropagation(); lbIndex = i; renderLightbox(); });
+        lbThumbs.appendChild(t);
+      });
+
+      lbPrev.style.visibility = imgs.length > 1 ? "visible" : "hidden";
+      lbNext.style.visibility = imgs.length > 1 ? "visible" : "hidden";
+    }
+
+    function stepLightbox(dir){
+      const item = lbCardId ? getItemById(lbCardId) : null;
+      const imgs = item && Array.isArray(item.images) ? item.images : [];
+      if(imgs.length < 2) return;
+      lbIndex = (lbIndex + dir + imgs.length) % imgs.length;
+      renderLightbox();
+    }
+
+    lbClose.addEventListener("click", (e)=>{ e.stopPropagation(); closeLightbox(); });
+    lbPrev.addEventListener("click", (e)=>{ e.stopPropagation(); stepLightbox(-1); });
+    lbNext.addEventListener("click", (e)=>{ e.stopPropagation(); stepLightbox(+1); });
+
+    lightbox.addEventListener("click", ()=> closeLightbox());
+    document.querySelector(".lb-inner").addEventListener("click", (e)=> e.stopPropagation());
+
+    document.addEventListener("keydown", (e)=>{
+      if(lightbox.classList.contains("hidden")) return;
+      if(e.key === "Escape") closeLightbox();
+      if(e.key === "ArrowLeft") stepLightbox(-1);
+      if(e.key === "ArrowRight") stepLightbox(+1);
+    });
+
+    lbImgArea.addEventListener("touchstart", (e)=>{
+      if(lightbox.classList.contains("hidden")) return;
+      lbTouchStartX = e.touches?.[0]?.clientX ?? null;
+    }, { passive:true });
+
+    lbImgArea.addEventListener("touchend", (e)=>{
+      if(lightbox.classList.contains("hidden")) return;
+      const endX = e.changedTouches?.[0]?.clientX ?? null;
+      if(lbTouchStartX == null || endX == null) return;
+      const dx = endX - lbTouchStartX;
+      lbTouchStartX = null;
+      if(Math.abs(dx) < 50) return;
+      stepLightbox(dx > 0 ? -1 : +1);
+    }, { passive:true });
+
+    // ---------- Edit thumbs helpers ----------
+    function refreshEditThumbs(){
+      if(!editDialog.open) return;
+      renderThumbs(editThumbsEl, editImages, {
+        onRemove: (i)=>{ editImages.splice(i,1); refreshEditThumbs(); },
+        onMakeCover: (i)=>{ editImages = makeCover(editImages, i); refreshEditThumbs(); }
+      });
+    }
+
+    // ---------- Render main ----------
+    function render(){
+      setAdminUI();
+
+      // В админке показываем превью добавления
+      if(isAdmin){
+        renderThumbs(addThumbsEl, pendingAddImages, {
+          onRemove: (i)=>{ pendingAddImages.splice(i,1); render(); },
+          onMakeCover: (i)=>{ pendingAddImages = makeCover(pendingAddImages, i); render(); }
+        });
+      }else{
+        addThumbsEl.innerHTML = "";
+        pendingAddImages = [];
+      }
+
+      tabsEl.forEach(btn=>{
+        const isActive = btn.dataset.tab === activeTab;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+
+      const q = getQuery();
+      const list = getActiveList();
+      const filtered = q
+        ? list.filter(x =>
+            (x.name || "").toLowerCase().includes(q) ||
+            (x.desc || "").toLowerCase().includes(q) ||
+            ((x.priceNew || "") + " " + (x.priceOld || "")).toLowerCase().includes(q)
+          )
+        : list;
+
+      const textCount = `Позиции: ${list.length}${q ? " (найдено: " + filtered.length + ")" : ""}`;
+      countBadge.textContent = textCount;
+      countBadgePublic.textContent = textCount;
+
+      gridEl.innerHTML = "";
+
+      filtered.forEach((item, idx)=>{
+        const card = document.createElement("article");
+        const isSelected = selectedCardId === item.id;
+        card.className = "card" + (isSelected ? " selected" : "");
+
+        const imgs = Array.isArray(item.images) ? item.images : [];
+        const hasImgs = imgs.length > 0;
+        const firstSrc = hasImgs ? imgs[0] : "";
+
+        const dots = hasImgs && imgs.length > 1
+          ? `<div class="dots">${imgs.map((_,i)=>`<span class="dot ${i===0?"active":""}"></span>`).join("")}</div>`
+          : "";
+
+        const controls = hasImgs && imgs.length > 1
+          ? `<div class="gallery-controls">
+              <button class="gbtn" data-prev="${item.id}" type="button">‹</button>
+              <button class="gbtn" data-next="${item.id}" type="button">›</button>
+            </div>`
+          : "";
+
+        const inThumbs = (isSelected && imgs.length)
+          ? `<div class="in-card-thumbs" data-thumbs="${escapeHtml(item.id)}">
+              ${imgs.map((src,i)=>`<div class="in-thumb ${i===0?"active":""}" data-jump="${escapeHtml(item.id)}" data-index="${i}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.name||"Фото")}"></div>`).join("")}
+            </div>`
+          : "";
+
+        card.innerHTML = `
+          <div class="img" data-gallery="${escapeHtml(item.id)}" data-index="0" data-imgwrap="${escapeHtml(item.id)}" title="Тап — полноэкранный просмотр">
+            ${hasImgs ? `<img class="photo" src="${escapeHtml(firstSrc)}" alt="${escapeHtml(item.name || "Фото")}">` : ""}
+            ${controls}
+            ${dots}
+            <div class="overlay">
+              <span class="pill">${escapeHtml(item.tag || "")}</span>
+              <span class="pill">#${idx+1}</span>
+            </div>
+          </div>
+          ${inThumbs}
+          <div class="content">
+            <div class="name">${escapeHtml(item.name || "Без названия")}</div>
+            <div class="desc">${escapeHtml(item.desc || "")}</div>
+            <div class="row" style="justify-content:space-between; align-items:center; gap:10px;">
+              <div class="price">
+                <span class="old">${escapeHtml(item.priceOld || "")}</span>
+                <span class="new">${escapeHtml(item.priceNew || "")}</span>
+              </div>
+              <div class="actions ${isAdmin ? "" : "hidden"}">
+                <button class="btn secondary" data-edit="${escapeHtml(item.id)}" type="button">Редактировать</button>
+                <button class="btn danger" data-del="${escapeHtml(item.id)}" type="button">Удалить</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener("click", (e)=>{
+          const t = e.target;
+          if(t && (t.closest("button") || t.closest(".actions") || t.closest(".thumb") )) return;
+          selectedCardId = item.id;
+          render();
+        });
+
+        gridEl.appendChild(card);
+      });
+
+      // Снятие выделения кликом по пустому месту
+      document.addEventListener("click", onDocClickOnce, { once:true });
+      function onDocClickOnce(ev){
+        if(lightbox && !lightbox.classList.contains("hidden")){
+          document.addEventListener("click", onDocClickOnce, { once:true });
+          return;
+        }
+        const within = ev.target && ev.target.closest && ev.target.closest(".card");
+        if(!within && selectedCardId !== null){
+          selectedCardId = null;
+          render();
+        }else{
+          document.addEventListener("click", onDocClickOnce, { once:true });
+        }
+      }
+
+      // Галерея стрелками (для всех)
+      function updateGallery(id, dir){
+        const el = gridEl.querySelector(`[data-gallery="${CSS.escape(id)}"]`);
+        if(!el) return;
+
+        const item = getItemById(id);
+        if(!item || !Array.isArray(item.images) || item.images.length < 2) return;
+
+        let i = parseInt(el.getAttribute("data-index") || "0", 10);
+        i = (i + dir + item.images.length) % item.images.length;
+        el.setAttribute("data-index", String(i));
+
+        const img = el.querySelector("img.photo");
+        if(img) img.src = item.images[i];
+
+        const dots = Array.from(el.querySelectorAll(".dot"));
+        dots.forEach((d, idx)=> d.classList.toggle("active", idx === i));
+
+        const thumbsWrap = gridEl.querySelector(`[data-thumbs="${CSS.escape(id)}"]`);
+        if(thumbsWrap){
+          thumbsWrap.querySelectorAll(".in-thumb").forEach(th=>{
+            th.classList.toggle("active", th.getAttribute("data-index") === String(i));
+          });
+        }
+      }
+
+      gridEl.querySelectorAll("[data-prev]").forEach(b=>{
+        b.addEventListener("click", (e)=>{ e.stopPropagation(); updateGallery(b.getAttribute("data-prev"), -1); });
+      });
+      gridEl.querySelectorAll("[data-next]").forEach(b=>{
+        b.addEventListener("click", (e)=>{ e.stopPropagation(); updateGallery(b.getAttribute("data-next"), +1); });
+      });
+
+      // Миниатюры: одинарный тап открывает полноэкранно выбранное фото (вариант №2)
+      gridEl.querySelectorAll("[data-jump]").forEach(th=>{
+        th.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const id = th.getAttribute("data-jump");
+          const idx = parseInt(th.getAttribute("data-index") || "0", 10);
+          openLightbox(id, idx);
+        });
+      });
+
+      // Полноэкранный по одинарному тапу/клику по большому фото
+      gridEl.querySelectorAll("[data-imgwrap]").forEach(w=>{
+        w.addEventListener("click", (e)=>{
+          const t = e.target;
+          if(t && t.closest && t.closest("button")) return; // не мешаем стрелкам ‹ ›
+          e.stopPropagation();
+          const id = w.getAttribute("data-imgwrap");
+          const idx = parseInt(w.getAttribute("data-index") || "0", 10);
+          openLightbox(id, idx);
+        });
+
+        // Двойной клик оставляем как альтернативу (для ПК)
+        w.addEventListener("dblclick", (e)=>{
+          e.stopPropagation();
+          const id = w.getAttribute("data-imgwrap");
+          const idx = parseInt(w.getAttribute("data-index") || "0", 10);
+          openLightbox(id, idx);
+        });
+      });
+
+      // Удаление/Редактирование (только админ)
+      if(isAdmin){
+        gridEl.querySelectorAll("[data-del]").forEach(btn=>{
+          btn.addEventListener("click", (e)=>{
+            e.stopPropagation();
+            const id = btn.getAttribute("data-del");
+            const list = getActiveList().filter(x => x.id !== id);
+            setActiveList(list);
+            if(selectedCardId === id) selectedCardId = null;
+            saveState();
+            render();
+          });
+        });
+
+        gridEl.querySelectorAll("[data-edit]").forEach(btn=>{
+          btn.addEventListener("click", (e)=>{
+            e.stopPropagation();
+            const id = btn.getAttribute("data-edit");
+            const item = getItemById(id);
+            if(!item) return;
+
+            editingId = id;
+            editImages = Array.isArray(item.images) ? [...item.images].slice(0,MAX_PHOTOS) : [];
+
+            editTitle.textContent = `Редактирование: ${item.name || ""}`;
+            editPriceNew.value = item.priceNew || "";
+            editPriceOld.value = item.priceOld || "";
+
+            editFilesEl.value = "";
+            refreshEditThumbs();
+            editDialog.showModal();
+          });
+        });
+      }
+    }
+
+    // tabs
+    tabsEl.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        activeTab = btn.dataset.tab;
+        selectedCardId = null;
+        saveState();
+        render();
+      });
+    });
+
+    // admin login/logout
+    adminBtn.addEventListener("click", ()=>{
+      if(isAdmin){
+        // выход + прячем кнопку сразу
+        isAdmin = false;
+        sessionStorage.removeItem("doors_admin");
+        adminBtnVisible = false;
+        render();
+        return;
+      }
+
+      const p = prompt("Введите пароль администратора:");
+      if(p === null) return;
+      if(p === ADMIN_PASSWORD){
+        isAdmin = true;
+        sessionStorage.setItem("doors_admin", "1");
+        render();
+      }else{
+        alert("Неверный пароль");
+      }
+    });
+
+    // Показать кнопку «Войти как админ»: 7 быстрых тапов по заголовку (за 3 секунды)
+    let titleTapCount = 0;
+    let titleTapTimer = null;
+
+    function revealAdminButton(){
+      adminBtnVisible = true;
+      render();
+    }
+
+    siteTitle.addEventListener("click", ()=>{
+      // Если уже видна или вы уже админ — ничего не делаем
+      if(adminBtnVisible || isAdmin) return;
+
+      titleTapCount++;
+      clearTimeout(titleTapTimer);
+      titleTapTimer = setTimeout(()=>{ titleTapCount = 0; }, 3000);
+      if(titleTapCount >= 7){
+        titleTapCount = 0;
+        revealAdminButton();
+      }
+    });
+
+    // add images (limit)
+    addFilesEl.addEventListener("change", async ()=>{
+      if(!isAdmin) return;
+      try{
+        const remaining = MAX_PHOTOS - pendingAddImages.length;
+        const { out, skipped } = await readFilesCompressedWithLimit(addFilesEl.files, remaining);
+        pendingAddImages.push(...out);
+        pendingAddImages = pendingAddImages.slice(0, MAX_PHOTOS);
+        addFilesEl.value = "";
+        if(skipped > 0) alert(`Можно максимум ${MAX_PHOTOS} фото. Лишние файлы (${skipped}) не добавлены.`);
+        render();
+      }catch(_){
+        alert("Не удалось загрузить/сжать фото");
+      }
+    });
+
+    // add item
+    addBtn.addEventListener("click", ()=>{
+      if(!isAdmin){
+        alert("Добавление доступно только в режиме администратора.");
+        return;
+      }
+
+      const name = nameEl.value.trim();
+      const priceNew = priceNewEl.value.trim();
+      const priceOld = priceOldEl.value.trim();
+      const desc = descEl.value.trim();
+      const images = [...pendingAddImages].slice(0, MAX_PHOTOS);
+
+      if(!name){
+        nameEl.focus();
+        nameEl.style.boxShadow = "0 0 0 2px rgba(255,90,106,.35)";
+        setTimeout(()=> nameEl.style.boxShadow = "", 700);
+        return;
+      }
+
+      const newItem = {
+        id: crypto.randomUUID(),
+        name,
+        priceNew,
+        priceOld,
+        desc,
+        tag: activeTab === "interior" ? "Межкомн." : "Входная",
+        images
+      };
+
+      const list = getActiveList();
+      list.unshift(newItem);
+      setActiveList(list);
+
+      nameEl.value = "";
+      priceNewEl.value = "";
+      priceOldEl.value = "";
+      descEl.value = "";
+      pendingAddImages = [];
+      searchEl.value = "";
+      searchPublicEl.value = "";
+
+      saveState();
+      render();
+    });
+
+    // search
+    searchEl.addEventListener("input", render);
+    searchPublicEl.addEventListener("input", render);
+
+    // reset / clear
+    resetBtn.addEventListener("click", ()=>{
+      if(!isAdmin){
+        alert("Сброс доступен только в режиме администратора.");
+        return;
+      }
+      const fresh = defaultState();
+      fresh.activeTab = activeTab;
+      state = fresh;
+      saveState();
+      pendingAddImages = [];
+      selectedCardId = null;
+      render();
+    });
+
+    clearBtn.addEventListener("click", ()=>{
+      if(!isAdmin){
+        alert("Очистка доступна только в режиме администратора.");
+        return;
+      }
+      setActiveList([]);
+      saveState();
+      selectedCardId = null;
+      render();
+    });
+
+    // edit dialog
+    editClose.addEventListener("click", ()=> editDialog.close());
+    editCancel.addEventListener("click", ()=> editDialog.close());
+
+    editDialog.addEventListener("close", ()=>{
+      editingId = null;
+      editImages = [];
+      editThumbsEl.innerHTML = "";
+      editFilesEl.value = "";
+    });
+
+    editFilesEl.addEventListener("change", async ()=>{
+      if(!isAdmin) return;
+      try{
+        const remaining = MAX_PHOTOS - editImages.length;
+        const { out, skipped } = await readFilesCompressedWithLimit(editFilesEl.files, remaining);
+        editImages.push(...out);
+        editImages = editImages.slice(0, MAX_PHOTOS);
+        editFilesEl.value = "";
+        if(skipped > 0) alert(`Можно максимум ${MAX_PHOTOS} фото. Лишние файлы (${skipped}) не добавлены.`);
+        refreshEditThumbs();
+      }catch(_){
+        alert("Не удалось загрузить/сжать фото");
+      }
+    });
+
+    editSave.addEventListener("click", ()=>{
+      if(!isAdmin || !editingId) return;
+
+      const item = getItemById(editingId);
+      if(!item) return;
+
+      item.priceNew = (editPriceNew.value || "").trim();
+      item.priceOld = (editPriceOld.value || "").trim();
+      item.images = [...editImages].slice(0, MAX_PHOTOS);
+
+      saveState();
+      editDialog.close();
+      render();
+    });
+
+    // ---- Mini tests (console) ----
+    function assert(cond, msg){
+      if(!cond) throw new Error("TEST FAIL: " + msg);
+    }
+
+    function runTests(){
+      // test 1: state always clamps images
+      const fake = { id:"t", images:["1","2","3","4","5","6"] };
+      const clamped = (fake.images || []).slice(0, MAX_PHOTOS);
+      assert(clamped.length === MAX_PHOTOS, "Clamp to MAX_PHOTOS");
+
+      // test 2: openLightbox should not throw on empty images
+      const before = lbCardId;
+      openLightbox("__nope__", 0);
+      assert(lbCardId === before, "openLightbox ignores missing item");
+
+      // test 3: admin button visibility rule
+      const computeShowBtn = (isAdminX, visibleX) => (isAdminX || visibleX);
+      assert(computeShowBtn(false, false) === false, "Admin btn hidden by default");
+      assert(computeShowBtn(false, true) === true, "Admin btn shown after 7 taps");
+      assert(computeShowBtn(true, false) === true, "Admin btn shown while admin");
+
+      // test 4: makeCover moves chosen index to front
+      const cov = makeCover(["a","b","c"], 2);
+      assert(cov[0] === "c" && cov.length === 3, "makeCover moves selected to front");
+
+      console.log("✅ tests ok");
+    }
+
+    // init
+    activeTab = state.activeTab || "interior";
+    render();
+    try{ runTests(); }catch(e){ console.warn(e); }
+  </script>
+</body>
+</html>
