@@ -92,24 +92,6 @@
     .price .new:empty{display:none}
     .price .old:empty{display:none}
 
-    .actions{display:flex; gap:8px; margin-top:6px; flex-wrap:wrap}
-    .actions .btn{padding:9px 10px; border-radius:12px; font-size:13px}
-
-    /* Превью фото в админке */
-    .thumbs{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-    .thumb{width:52px; height:52px; border-radius:12px; border:1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.15); position:relative}
-    .thumb img{width:100%; height:100%; object-fit:cover; display:block}
-    .thumb .x{position:absolute; top:5px; right:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:950; line-height:1}
-    .thumb .cover{position:absolute; left:5px; top:5px; border:1px solid rgba(255,255,255,.16); background: rgba(0,0,0,.45); color:var(--text); border-radius:999px; padding:2px 7px; cursor:pointer; font-weight:950; line-height:1}
-    .thumb .flag{position:absolute; left:6px; bottom:6px; font-size:10px; padding:3px 6px; border-radius:999px; background: rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.14)}
-
-    dialog{border:1px solid var(--border); border-radius:18px; background:#0c1526; color: var(--text); box-shadow: var(--shadow); width:min(860px, 92vw);}
-    dialog::backdrop{background: rgba(0,0,0,.55)}
-    .dialog-head{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border)}
-    .dialog-title{font-weight:950}
-    .dialog-body{padding:14px}
-    .dialog-actions{display:flex; gap:10px; justify-content:flex-end; padding:12px 14px; border-top:1px solid var(--border)}
-
     /* Lightbox */
     .lightbox{position:fixed; inset:0; z-index:9999; background: rgba(0,0,0,.78); display:flex; align-items:center; justify-content:center; padding:14px;}
     .lightbox.hidden{display:none}
@@ -158,59 +140,11 @@
       </div>
     </header>
 
-    <div class="panel" id="adminPanel">
-      <div class="row">
-        <div class="field">
-          <label for="modelName">Модель (название)</label>
-          <input id="modelName" placeholder="Напр. Лира 3D" />
-        </div>
-        <div class="field">
-          <label for="modelColor">Цвет</label>
-          <input id="modelColor" placeholder="Напр. Белый дуб" />
-        </div>
-        <div class="field">
-          <label for="modelFinish">Покрытие</label>
-          <input id="modelFinish" placeholder="Напр. Экошпон / ПВХ / Эмаль" />
-        </div>
-        <div class="field">
-          <label for="modelPriceNew">Цена (со скидкой)</label>
-          <input id="modelPriceNew" placeholder="Напр. 199 € или 24 900 ₽" />
-        </div>
-        <div class="field">
-          <label for="modelPriceOld">Цена (без скидки, зачёркнутая)</label>
-          <input id="modelPriceOld" placeholder="Напр. 249 €" />
-        </div>
-        <div class="field" style="flex:1.2">
-          <label for="modelDesc">Описание</label>
-          <input id="modelDesc" placeholder="Коротко: материал, замок, размер..." />
-        </div>
-        <div class="field" style="flex:1.1">
-          <label for="modelImagesFiles">Фото (до 5 шт.)</label>
-          <input id="modelImagesFiles" type="file" accept="image/*" multiple />
-          <div class="thumbs" id="addThumbs"></div>
-          <div class="badge" style="margin-top:8px;">💡 Обложка — это первое фото. Нажмите «★» на миниатюре.</div>
-        </div>
-        <div class="field" style="flex:.7">
-          <label>&nbsp;</label>
-          <button class="btn" id="addBtn" type="button">Добавить</button>
-        </div>
-      </div>
-
-      <div class="meta">
-        <div class="badge" id="countBadge">Позиции: 0</div>
-        <div class="search">
-          <input id="search" placeholder="Поиск по модели/цвету/покрытию/описанию/цене..." />
-          <button class="btn secondary" id="resetBtn" type="button" title="Вернуть демо-50 позиций">Сброс (демо)</button>
-          <button class="btn danger" id="clearBtn" type="button" title="Удалить все позиции на вкладке">Очистить вкладку</button>
-        </div>
-      </div>
-
-      <div class="badge" style="margin-top:8px;">
-        ⚠️ Фото сохраняются внутри браузера (сжатые JPEG). Очень много фото всё равно может «утяжелить» каталог.
-      </div>
+    <div class="panel hidden" id="adminPanel">
+      <!-- Админ-панель оставлена в коде, но в варианте №2 она скрыта -->
     </div>
 
-    <div class="panel hidden" id="publicSearchPanel" style="margin-top:12px;">
+    <div class="panel" id="publicSearchPanel" style="margin-top:12px;">
       <div class="meta" style="margin:0;">
         <div class="badge" id="countBadgePublic">Позиции: 0</div>
         <div class="search">
@@ -221,71 +155,6 @@
 
     <div id="grid" class="grid" aria-live="polite"></div>
   </div>
-
-  <dialog id="editDialog">
-    <div class="dialog-head">
-      <div class="dialog-title" id="editTitle">Редактирование</div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <button class="btn secondary" id="editClose" type="button">Закрыть</button>
-      </div>
-    </div>
-    <div class="dialog-body">
-      <div class="row">
-        <div class="field">
-          <label for="editName">Модель (название)</label>
-          <input id="editName" />
-        </div>
-        <div class="field">
-          <label for="editColor">Цвет</label>
-          <input id="editColor" />
-        </div>
-        <div class="field">
-          <label for="editFinish">Покрытие</label>
-          <input id="editFinish" />
-        </div>
-      </div>
-
-      <div style="height:10px"></div>
-
-      <div class="row">
-        <div class="field">
-          <label for="editDesc">Описание</label>
-          <input id="editDesc" />
-        </div>
-      </div>
-
-      <div style="height:10px"></div>
-
-      <div class="row">
-        <div class="field">
-          <label for="editPriceNew">Цена (со скидкой)</label>
-          <input id="editPriceNew" />
-        </div>
-        <div class="field">
-          <label for="editPriceOld">Цена (без скидки)</label>
-          <input id="editPriceOld" />
-        </div>
-      </div>
-
-      <div style="height:10px"></div>
-
-      <div class="field">
-        <label for="editImagesFiles">Фото (добавить ещё, до 5)</label>
-        <input id="editImagesFiles" type="file" accept="image/*" multiple />
-      </div>
-
-      <div style="height:10px"></div>
-
-      <div class="field">
-        <label>Текущие фото (★ = обложка, × = удалить)</label>
-        <div class="thumbs" id="editThumbs"></div>
-      </div>
-    </div>
-    <div class="dialog-actions">
-      <button class="btn secondary" id="editCancel" type="button">Отмена</button>
-      <button class="btn" id="editSave" type="button">Сохранить</button>
-    </div>
-  </dialog>
 
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox hidden" aria-hidden="true">
@@ -306,917 +175,507 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "doors_catalog_v8";
-    const ADMIN_PASSWORD = "admin123"; // поменяйте пароль
-    const MAX_PHOTOS = 5;
+  // ====== НАСТРОЙКА: Google Sheets через OpenSheet ======
+  var SHEET_ID = "1hhYlP9kbLOeUBtu2Amfe8Fs8py-yP_uXBKaqQU7bLwY";
+  var SHEET_INTERIOR = "interior";
+  var SHEET_ENTRANCE = "entrance";
 
-    const IMG_MAX_SIDE = 1280;
-    const IMG_QUALITY  = 0.78;
+  // ===== Совместимость =====
+  if (!window.CSS) window.CSS = {};
+  if (!CSS.escape) {
+    CSS.escape = function (value) {
+      // ВАЖНО: двойной слэш, чтобы строка стала "\$&" (иначе экранирование не работает корректно)
+      return String(value).replace(/[^a-zA-Z0-9_\-]/g, "\\$&");
+    };
+  }
 
-    const tabsEl = document.querySelectorAll(".tab");
-    const gridEl = document.getElementById("grid");
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-    const adminBtn = document.getElementById("adminBtn");
-    const adminBadge = document.getElementById("adminBadge");
-    const adminPanel = document.getElementById("adminPanel");
-    const publicSearchPanel = document.getElementById("publicSearchPanel");
-
-    const siteTitle = document.getElementById("siteTitle");
-
-    const countBadge = document.getElementById("countBadge");
-    const countBadgePublic = document.getElementById("countBadgePublic");
-
-    const nameEl = document.getElementById("modelName");
-    const colorEl = document.getElementById("modelColor");
-    const finishEl = document.getElementById("modelFinish");
-    const priceNewEl = document.getElementById("modelPriceNew");
-    const priceOldEl = document.getElementById("modelPriceOld");
-    const descEl  = document.getElementById("modelDesc");
-
-    const addFilesEl = document.getElementById("modelImagesFiles");
-    const addThumbsEl = document.getElementById("addThumbs");
-
-    const addBtn  = document.getElementById("addBtn");
-    const searchEl = document.getElementById("search");
-    const searchPublicEl = document.getElementById("searchPublic");
-    const resetBtn = document.getElementById("resetBtn");
-    const clearBtn = document.getElementById("clearBtn");
-
-    const editDialog = document.getElementById("editDialog");
-    const editTitle = document.getElementById("editTitle");
-    const editClose = document.getElementById("editClose");
-    const editCancel = document.getElementById("editCancel");
-    const editSave = document.getElementById("editSave");
-
-    const editName = document.getElementById("editName");
-    const editColor = document.getElementById("editColor");
-    const editFinish = document.getElementById("editFinish");
-    const editDesc = document.getElementById("editDesc");
-
-    const editPriceNew = document.getElementById("editPriceNew");
-    const editPriceOld = document.getElementById("editPriceOld");
-    const editFilesEl = document.getElementById("editImagesFiles");
-    const editThumbsEl = document.getElementById("editThumbs");
-
-    // lightbox
-    const lightbox = document.getElementById("lightbox");
-    const lbClose = document.getElementById("lbClose");
-    const lbPrev = document.getElementById("lbPrev");
-    const lbNext = document.getElementById("lbNext");
-    const lbImg = document.getElementById("lbImg");
-    const lbTitle = document.getElementById("lbTitle");
-    const lbThumbs = document.getElementById("lbThumbs");
-    const lbImgArea = document.getElementById("lbImgArea");
-
-    // Админ-состояние
-    let isAdmin = sessionStorage.getItem("doors_admin") === "1";
-    // Кнопка админа по требованию: появляется только после 7 тапов и исчезает после выхода.
-    let adminBtnVisible = false;
-
-    let state = loadState();
-    let activeTab = state.activeTab || "interior";
-
-    let selectedCardId = null;
-    let pendingAddImages = [];
-
-    let editingId = null;
-    let editImages = [];
-
-    // lightbox state
-    let lbCardId = null;
-    let lbIndex = 0;
-    let lbTouchStartX = null;
-
-    // dnd state
-    let dragFromId = null;
-
-    function uid(){
-      // crypto.randomUUID не везде поддерживается
-      if(typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
-      return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+  // ВАЖНО: без регэкспа, чтобы никогда не ломалось переносами строки.
+  function parsePhotos(value) {
+    if (!value) return [];
+    var s = String(value);
+    // заменяем переносы на запятые, затем сплит
+    s = s.replace(/\r\n|\r|\n/g, ",");
+    var parts = s.split(",");
+    var out = [];
+    for (var i = 0; i < parts.length; i++) {
+      var u = (parts[i] || "").trim();
+      if (!u) continue;
+      out.push(u);
+      if (out.length >= 5) break;
     }
+    return out;
+  }
 
-    function makeDemoItems(type, n=50){
-      const isInterior = type === "interior";
-      const baseNames = isInterior
-        ? ["Лира", "Соло", "Рондо", "Классик", "Нео", "Сканди", "Лофт", "Модерн", "Эко", "Премьер"]
-        : ["Гранит", "Форпост", "Барьер", "Страж", "Титан", "Альфа", "Вектор", "Рубеж", "Броня", "Сейф"];
-      const colors = isInterior
-        ? ["Белый", "Белый дуб", "Дуб натуральный", "Венге", "Серый", "Орех", "Кашемир", "Графит"]
-        : ["Антик медь", "Антрацит", "Чёрный", "Серебро", "Коричневый", "Тёмный дуб"];
-      const finishes = isInterior
-        ? ["Экошпон", "ПВХ", "Эмаль", "Шпон", "Ламинат"]
-        : ["Порошковое", "МДФ-панель", "Антивандал", "ПВХ"];
-      const descA = isInterior
-        ? ["МДФ", "Скрытые петли", "Магнитный замок", "Шумоизоляция", "Стекло сатин"]
-        : ["Сталь 1.5 мм", "2 контура уплотнения", "Тёплый разрыв", "Замки 2 класса", "Ночная задвижка"];
+  function toNumberSafe(v, fallback) {
+    var n = parseFloat(String(v || "").replace(/[^0-9.\-]/g, ""));
+    return isNaN(n) ? fallback : n;
+  }
 
-      const items = [];
-      for(let i=1;i<=n;i++){
-        const name = baseNames[i % baseNames.length] + " " + (100 + i);
-        const color = colors[i % colors.length];
-        const finish = finishes[i % finishes.length];
-        const desc = descA[i % descA.length];
-
-        const newP = isInterior ? (80 + (i%20)*5) : (180 + (i%25)*7);
-        const oldP = isInterior ? (newP + 30) : (newP + 50);
-
-        items.push({
-          id: uid(),
-          name,
-          color,
-          finish,
-          priceNew: newP + " €",
-          priceOld: oldP + " €",
-          desc,
-          tag: isInterior ? "Межкомн." : "Входная",
-          images: []
-        });
-      }
-      return items;
-    }
-
-    function defaultState(){
-      return {
-        activeTab: "interior",
-        interior: makeDemoItems("interior", 50),
-        entrance: makeDemoItems("entrance", 50)
-      };
-    }
-
-    function migrateItem(x){
-      const name = x?.name ?? "";
-      return {
-        id: x?.id ?? uid(),
-        name,
-        color: x?.color ?? "",
-        finish: x?.finish ?? "",
-        priceNew: x?.priceNew ?? "",
-        priceOld: x?.priceOld ?? "",
-        desc: x?.desc ?? "",
-        tag: x?.tag ?? "",
-        images: (x?.images || []).slice(0, MAX_PHOTOS)
-      };
-    }
-
-    function loadState(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) return defaultState();
-        const parsed = JSON.parse(raw);
-        if(!parsed.interior || !parsed.entrance) return defaultState();
-        parsed.interior = (parsed.interior || []).map(migrateItem);
-        parsed.entrance = (parsed.entrance || []).map(migrateItem);
-        return parsed;
-      }catch(_){
-        return defaultState();
-      }
-    }
-
-    function saveState(){
-      state.activeTab = activeTab;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function getActiveList(){
-      return activeTab === "interior" ? state.interior : state.entrance;
-    }
-
-    function setActiveList(list){
-      if(activeTab === "interior") state.interior = list;
-      else state.entrance = list;
-    }
-
-    function setAdminUI(){
-      const showBtn = isAdmin || adminBtnVisible;
-      adminBtn.classList.toggle("hidden", !showBtn);
-
-      adminPanel.classList.toggle("hidden", !isAdmin);
-      adminBadge.classList.toggle("hidden", !isAdmin);
-      adminBtn.textContent = isAdmin ? "Выйти" : "Войти как админ";
-      publicSearchPanel.classList.toggle("hidden", isAdmin);
-
-      if(isAdmin) searchEl.value = searchPublicEl.value || "";
-      else searchPublicEl.value = searchEl.value || "";
-    }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function getQuery(){
-      return (isAdmin ? (searchEl.value||"") : (searchPublicEl.value||""))
-        .trim()
-        .toLowerCase();
-    }
-
-    function makeCover(images, idx){
-      if(!Array.isArray(images) || images.length === 0) return images;
-      if(idx <= 0 || idx >= images.length) return images;
-      const copy = [...images];
-      const [picked] = copy.splice(idx, 1);
-      copy.unshift(picked);
-      return copy;
-    }
-
-    async function fileToCompressedDataURL(file){
-      let bitmap;
-      try{
-        bitmap = await createImageBitmap(file);
-      }catch(_){
-        const dataUrl = await new Promise((resolve, reject)=>{
-          const r = new FileReader();
-          r.onload = ()=> resolve(String(r.result || ""));
-          r.onerror = ()=> reject(new Error("FileReader error"));
-          r.readAsDataURL(file);
-        });
-        bitmap = await new Promise((resolve, reject)=>{
-          const img = new Image();
-          img.onload = ()=> resolve(img);
-          img.onerror = ()=> reject(new Error("Image load error"));
-          img.src = dataUrl;
-        });
-      }
-
-      const w = bitmap.width;
-      const h = bitmap.height;
-      const scale = Math.min(1, IMG_MAX_SIDE / Math.max(w, h));
-      const outW = Math.max(1, Math.round(w * scale));
-      const outH = Math.max(1, Math.round(h * scale));
-
-      const canvas = document.createElement("canvas");
-      canvas.width = outW;
-      canvas.height = outH;
-      const ctx = canvas.getContext("2d", { alpha: false });
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(bitmap, 0, 0, outW, outH);
-
-      const data = canvas.toDataURL("image/jpeg", IMG_QUALITY);
-      try{ if(bitmap && bitmap.close) bitmap.close(); }catch(_){ }
-      return data;
-    }
-
-    async function readFilesCompressedWithLimit(fileList, remainingSlots){
-      const files = Array.from(fileList || []);
-      const take = files.slice(0, Math.max(0, remainingSlots));
-      const out = [];
-      for(const f of take){ out.push(await fileToCompressedDataURL(f)); }
-      return { out, skipped: Math.max(0, files.length - take.length) };
-    }
-
-    function renderThumbs(container, images, handlers){
-      const { onRemove, onMakeCover } = handlers || {};
-      container.innerHTML = "";
-      (images || []).forEach((src, idx)=>{
-        const t = document.createElement("div");
-        t.className = "thumb";
-        t.innerHTML = `<img src="${escapeHtml(src)}" alt="Фото ${idx+1}">`;
-
-        if(idx === 0 && (images || []).length){
-          const flag = document.createElement("div");
-          flag.className = "flag";
-          flag.textContent = "Обложка";
-          t.appendChild(flag);
-        }
-
-        if(onMakeCover){
-          const c = document.createElement("button");
-          c.type = "button";
-          c.className = "cover";
-          c.textContent = "★";
-          c.title = "Сделать обложкой";
-          c.addEventListener("click", (e)=>{ e.stopPropagation(); onMakeCover(idx); });
-          t.appendChild(c);
-        }
-
-        if(onRemove){
-          const b = document.createElement("button");
-          b.type = "button";
-          b.className = "x";
-          b.textContent = "×";
-          b.title = "Удалить фото";
-          b.addEventListener("click", (e)=>{ e.stopPropagation(); onRemove(idx); });
-          t.appendChild(b);
-        }
-
-        container.appendChild(t);
+  function httpGetJson(url) {
+    if (window.fetch) {
+      return fetch(url, { cache: "no-store" }).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
       });
     }
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try { resolve(JSON.parse(xhr.responseText)); } catch (e) { reject(e); }
+        } else {
+          reject(new Error("HTTP " + xhr.status));
+        }
+      };
+      xhr.send(null);
+    });
+  }
 
-    // ---------- Lightbox ----------
-    function getItemById(id){
-      return getActiveList().find(x => x.id === id);
+  function sheetUrl(sheetName) {
+    return "https://opensheet.elk.sh/" + encodeURIComponent(SHEET_ID) + "/" + encodeURIComponent(sheetName);
+  }
+
+  // UI
+  var tabsEl = document.querySelectorAll(".tab");
+  var gridEl = document.getElementById("grid");
+  var countBadgePublic = document.getElementById("countBadgePublic");
+  var searchPublicEl = document.getElementById("searchPublic");
+
+  // Hide admin UI (вариант №2)
+  var adminBtn = document.getElementById("adminBtn");
+  var adminBadge = document.getElementById("adminBadge");
+  var adminPanel = document.getElementById("adminPanel");
+  if (adminBtn) adminBtn.classList.add("hidden");
+  if (adminBadge) adminBadge.classList.add("hidden");
+  if (adminPanel) adminPanel.classList.add("hidden");
+
+  // Lightbox
+  var lightbox = document.getElementById("lightbox");
+  var lbClose = document.getElementById("lbClose");
+  var lbPrev = document.getElementById("lbPrev");
+  var lbNext = document.getElementById("lbNext");
+  var lbImg = document.getElementById("lbImg");
+  var lbTitle = document.getElementById("lbTitle");
+  var lbThumbs = document.getElementById("lbThumbs");
+  var lbImgArea = document.getElementById("lbImgArea");
+
+  var activeTab = "interior";
+  var selectedCardId = null;
+
+  var dataInterior = [];
+  var dataEntrance = [];
+  var isLoading = false;
+  var loadError = "";
+
+  var lbCardId = null;
+  var lbIndex = 0;
+  var lbTouchStartX = null;
+
+  function getActiveList() {
+    return activeTab === "interior" ? dataInterior : dataEntrance;
+  }
+
+  function getItemById(id) {
+    var list = getActiveList();
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+
+  function getQuery() {
+    return (searchPublicEl && searchPublicEl.value ? searchPublicEl.value : "").trim().toLowerCase();
+  }
+
+  function openLightbox(cardId, index) {
+    var item = getItemById(cardId);
+    if (!item || !item.images || !item.images.length) return;
+
+    lbCardId = cardId;
+    lbIndex = Math.max(0, Math.min(index || 0, item.images.length - 1));
+    selectedCardId = cardId;
+
+    lightbox.classList.remove("hidden");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    render();
+    renderLightbox();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.add("hidden");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    lbCardId = null;
+    lbIndex = 0;
+  }
+
+  function renderLightbox() {
+    var item = lbCardId ? getItemById(lbCardId) : null;
+    var imgs = item && item.images ? item.images : [];
+    if (!imgs.length) {
+      closeLightbox();
+      return;
     }
 
-    function openLightbox(cardId, index){
-      const item = getItemById(cardId);
-      if(!item || !Array.isArray(item.images) || item.images.length === 0) return;
+    lbIndex = (lbIndex + imgs.length) % imgs.length;
+    lbImg.src = imgs[lbIndex];
+    lbImg.alt = (item && item.name ? item.name + " — фото " + (lbIndex + 1) : "Фото " + (lbIndex + 1));
 
-      lbCardId = cardId;
-      lbIndex = Math.max(0, Math.min(index || 0, item.images.length-1));
-      selectedCardId = cardId;
+    var meta = [];
+    if (item && item.name) meta.push(item.name);
+    if (item && item.color) meta.push(item.color);
+    if (item && item.finish) meta.push(item.finish);
+    var metaText = meta.length ? meta.join(" • ") : "Фото";
 
-      lightbox.classList.remove("hidden");
-      lightbox.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
+    lbTitle.textContent = metaText + " • " + (lbIndex + 1) + "/" + imgs.length;
 
-      render();
-      renderLightbox();
-    }
-
-    function closeLightbox(){
-      lightbox.classList.add("hidden");
-      lightbox.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      lbCardId = null;
-      lbIndex = 0;
-    }
-
-    function renderLightbox(){
-      const item = lbCardId ? getItemById(lbCardId) : null;
-      const imgs = item && Array.isArray(item.images) ? item.images : [];
-      if(!imgs.length){
-        closeLightbox();
-        return;
-      }
-
-      lbIndex = (lbIndex + imgs.length) % imgs.length;
-      lbImg.src = imgs[lbIndex];
-      lbImg.alt = item?.name ? (item.name + ` — фото ${lbIndex+1}`) : `Фото ${lbIndex+1}`;
-      const meta = [item?.name, item?.color, item?.finish].filter(Boolean).join(" • ");
-      lbTitle.textContent = `${meta || "Фото"} • ${lbIndex+1}/${imgs.length}`;
-
-      lbThumbs.innerHTML = "";
-      imgs.forEach((src, i)=>{
-        const t = document.createElement("div");
-        t.className = "lb-t" + (i===lbIndex ? " active" : "");
-        t.innerHTML = `<img src="${escapeHtml(src)}" alt="">`;
-        t.addEventListener("click", (e)=>{ e.stopPropagation(); lbIndex = i; renderLightbox(); });
+    lbThumbs.innerHTML = "";
+    for (var i = 0; i < imgs.length; i++) {
+      (function (ii) {
+        var t = document.createElement("div");
+        t.className = "lb-t" + (ii === lbIndex ? " active" : "");
+        t.innerHTML = '<img src="' + escapeHtml(imgs[ii]) + '" alt="">';
+        t.addEventListener("click", function (e) {
+          e.stopPropagation();
+          lbIndex = ii;
+          renderLightbox();
+        });
         lbThumbs.appendChild(t);
+      })(i);
+    }
+
+    lbPrev.style.visibility = imgs.length > 1 ? "visible" : "hidden";
+    lbNext.style.visibility = imgs.length > 1 ? "visible" : "hidden";
+  }
+
+  function stepLightbox(dir) {
+    var item = lbCardId ? getItemById(lbCardId) : null;
+    var imgs = item && item.images ? item.images : [];
+    if (imgs.length < 2) return;
+    lbIndex = (lbIndex + dir + imgs.length) % imgs.length;
+    renderLightbox();
+  }
+
+  lbClose.addEventListener("click", function (e) { e.stopPropagation(); closeLightbox(); });
+  lbPrev.addEventListener("click", function (e) { e.stopPropagation(); stepLightbox(-1); });
+  lbNext.addEventListener("click", function (e) { e.stopPropagation(); stepLightbox(+1); });
+  lightbox.addEventListener("click", function () { closeLightbox(); });
+  document.querySelector(".lb-inner").addEventListener("click", function (e) { e.stopPropagation(); });
+
+  document.addEventListener("keydown", function (e) {
+    if (lightbox.classList.contains("hidden")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") stepLightbox(-1);
+    if (e.key === "ArrowRight") stepLightbox(+1);
+  });
+
+  lbImgArea.addEventListener("touchstart", function (e) {
+    if (lightbox.classList.contains("hidden")) return;
+    lbTouchStartX = (e.touches && e.touches[0] ? e.touches[0].clientX : null);
+  }, { passive: true });
+
+  lbImgArea.addEventListener("touchend", function (e) {
+    if (lightbox.classList.contains("hidden")) return;
+    var endX = (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : null);
+    if (lbTouchStartX == null || endX == null) return;
+    var dx = endX - lbTouchStartX;
+    lbTouchStartX = null;
+    if (Math.abs(dx) < 50) return;
+    stepLightbox(dx > 0 ? -1 : +1);
+  }, { passive: true });
+
+  function normalizeRows(rows, tabName) {
+    var list = [];
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i] || {};
+      var id = (r.id != null && String(r.id).trim() ? String(r.id).trim() : (tabName + "_" + (i + 1)));
+      var order = toNumberSafe(r.order, i + 1);
+      var images = parsePhotos(r.photos);
+
+      list.push({
+        id: id,
+        name: String(r.name || "").trim(),
+        color: String(r.color || "").trim(),
+        finish: String(r.finish || "").trim(),
+        desc: String(r.desc || "").trim(),
+        priceNew: String(r.price_new || "").trim(),
+        priceOld: String(r.price_old || "").trim(),
+        tag: tabName === "interior" ? "Межкомн." : "Входная",
+        images: images,
+        _order: order
       });
-
-      lbPrev.style.visibility = imgs.length > 1 ? "visible" : "hidden";
-      lbNext.style.visibility = imgs.length > 1 ? "visible" : "hidden";
     }
 
-    function stepLightbox(dir){
-      const item = lbCardId ? getItemById(lbCardId) : null;
-      const imgs = item && Array.isArray(item.images) ? item.images : [];
-      if(imgs.length < 2) return;
-      lbIndex = (lbIndex + dir + imgs.length) % imgs.length;
-      renderLightbox();
-    }
-
-    lbClose.addEventListener("click", (e)=>{ e.stopPropagation(); closeLightbox(); });
-    lbPrev.addEventListener("click", (e)=>{ e.stopPropagation(); stepLightbox(-1); });
-    lbNext.addEventListener("click", (e)=>{ e.stopPropagation(); stepLightbox(+1); });
-
-    lightbox.addEventListener("click", ()=> closeLightbox());
-    document.querySelector(".lb-inner").addEventListener("click", (e)=> e.stopPropagation());
-
-    document.addEventListener("keydown", (e)=>{
-      if(lightbox.classList.contains("hidden")) return;
-      if(e.key === "Escape") closeLightbox();
-      if(e.key === "ArrowLeft") stepLightbox(-1);
-      if(e.key === "ArrowRight") stepLightbox(+1);
+    list.sort(function (a, b) {
+      return (a._order || 0) - (b._order || 0);
     });
 
-    lbImgArea.addEventListener("touchstart", (e)=>{
-      if(lightbox.classList.contains("hidden")) return;
-      lbTouchStartX = e.touches?.[0]?.clientX ?? null;
-    }, { passive:true });
+    return list;
+  }
 
-    lbImgArea.addEventListener("touchend", (e)=>{
-      if(lightbox.classList.contains("hidden")) return;
-      const endX = e.changedTouches?.[0]?.clientX ?? null;
-      if(lbTouchStartX == null || endX == null) return;
-      const dx = endX - lbTouchStartX;
-      lbTouchStartX = null;
-      if(Math.abs(dx) < 50) return;
-      stepLightbox(dx > 0 ? -1 : +1);
-    }, { passive:true });
+  function setCounts(filteredLen, totalLen, hasQuery) {
+    var text = "Позиции: " + totalLen + (hasQuery ? " (найдено: " + filteredLen + ")" : "");
+    if (countBadgePublic) countBadgePublic.textContent = text;
+  }
 
-    // ---------- Edit thumbs helpers ----------
-    function refreshEditThumbs(){
-      if(!editDialog.open) return;
-      renderThumbs(editThumbsEl, editImages, {
-        onRemove: (i)=>{ editImages.splice(i,1); refreshEditThumbs(); },
-        onMakeCover: (i)=>{ editImages = makeCover(editImages, i); refreshEditThumbs(); }
-      });
+  function render() {
+    var q = getQuery();
+    var list = getActiveList();
+
+    if (isLoading) {
+      gridEl.innerHTML = '<div class="badge" style="grid-column:1/-1; padding:12px;">Загрузка каталога…</div>';
+      setCounts(0, 0, false);
+      return;
     }
 
-    // ---------- Render main ----------
-    function render(){
-      setAdminUI();
+    if (loadError) {
+      gridEl.innerHTML = '<div class="badge" style="grid-column:1/-1; padding:12px; border-color: rgba(255,90,106,.35);">Не удалось загрузить каталог. Проверьте доступ к таблице и попробуйте обновить страницу.<br><br><b>Техническая ошибка:</b> ' + escapeHtml(loadError) + '</div>';
+      setCounts(0, 0, false);
+      return;
+    }
 
-      if(isAdmin){
-        renderThumbs(addThumbsEl, pendingAddImages, {
-          onRemove: (i)=>{ pendingAddImages.splice(i,1); render(); },
-          onMakeCover: (i)=>{ pendingAddImages = makeCover(pendingAddImages, i); render(); }
-        });
-      }else{
-        addThumbsEl.innerHTML = "";
-        pendingAddImages = [];
+    var filtered = list;
+    if (q) {
+      filtered = [];
+      for (var i = 0; i < list.length; i++) {
+        var x = list[i];
+        var hay = (x.name + " " + x.color + " " + x.finish + " " + x.desc + " " + x.priceNew + " " + x.priceOld).toLowerCase();
+        if (hay.indexOf(q) !== -1) filtered.push(x);
+      }
+    }
+
+    setCounts(filtered.length, list.length, !!q);
+    gridEl.innerHTML = "";
+
+    for (var idx = 0; idx < filtered.length; idx++) {
+      var item = filtered[idx];
+
+      var card = document.createElement("article");
+      card.className = "card" + (selectedCardId === item.id ? " selected" : "");
+
+      var imgs = item.images || [];
+      var hasImgs = imgs.length > 0;
+      var firstSrc = hasImgs ? imgs[0] : "";
+
+      var dots = "";
+      if (hasImgs && imgs.length > 1) {
+        var ds = [];
+        for (var di = 0; di < imgs.length; di++) ds.push('<span class="dot ' + (di === 0 ? "active" : "") + '"></span>');
+        dots = '<div class="dots">' + ds.join("") + '</div>';
       }
 
-      tabsEl.forEach(btn=>{
-        const isActive = btn.dataset.tab === activeTab;
-        btn.classList.toggle("active", isActive);
-        btn.setAttribute("aria-selected", isActive ? "true" : "false");
-      });
+      var controls = "";
+      if (hasImgs && imgs.length > 1) {
+        controls = '<div class="gallery-controls">'
+          + '<button class="gbtn" data-prev="' + escapeHtml(item.id) + '" type="button">‹</button>'
+          + '<button class="gbtn" data-next="' + escapeHtml(item.id) + '" type="button">›</button>'
+          + '</div>';
+      }
 
-      const q = getQuery();
-      const list = getActiveList();
-      const filtered = q
-        ? list.filter(x =>
-            (x.name || "").toLowerCase().includes(q) ||
-            (x.color || "").toLowerCase().includes(q) ||
-            (x.finish || "").toLowerCase().includes(q) ||
-            (x.desc || "").toLowerCase().includes(q) ||
-            ((x.priceNew || "") + " " + (x.priceOld || "")).toLowerCase().includes(q)
-          )
-        : list;
-
-      const textCount = `Позиции: ${list.length}${q ? " (найдено: " + filtered.length + ")" : ""}`;
-      countBadge.textContent = textCount;
-      countBadgePublic.textContent = textCount;
-
-      gridEl.innerHTML = "";
-
-      for(let idx=0; idx<filtered.length; idx++){
-        const item = filtered[idx];
-        const card = document.createElement("article");
-        card.className = "card" + (selectedCardId === item.id ? " selected" : "");
-
-        if(isAdmin){
-          card.setAttribute("draggable", "true");
-          card.dataset.dragId = item.id;
+      var inThumbs = "";
+      if (selectedCardId === item.id && imgs.length) {
+        var ts = [];
+        for (var ti = 0; ti < imgs.length; ti++) {
+          ts.push('<div class="in-thumb ' + (ti === 0 ? "active" : "") + '" data-jump="' + escapeHtml(item.id) + '" data-index="' + ti + '"><img src="' + escapeHtml(imgs[ti]) + '" alt="' + escapeHtml(item.name || "Фото") + '"></div>');
         }
-
-        const imgs = Array.isArray(item.images) ? item.images : [];
-        const hasImgs = imgs.length > 0;
-        const firstSrc = hasImgs ? imgs[0] : "";
-
-        const dots = hasImgs && imgs.length > 1
-          ? `<div class="dots">${imgs.map((_,i)=>`<span class="dot ${i===0?"active":""}"></span>`).join("")}</div>`
-          : "";
-
-        const controls = hasImgs && imgs.length > 1
-          ? `<div class="gallery-controls">
-              <button class="gbtn" data-prev="${escapeHtml(item.id)}" type="button">‹</button>
-              <button class="gbtn" data-next="${escapeHtml(item.id)}" type="button">›</button>
-            </div>`
-          : "";
-
-        const inThumbs = (selectedCardId === item.id && imgs.length)
-          ? `<div class="in-card-thumbs" data-thumbs="${escapeHtml(item.id)}">
-              ${imgs.map((src,i)=>`<div class="in-thumb ${i===0?"active":""}" data-jump="${escapeHtml(item.id)}" data-index="${i}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.name||"Фото")}"></div>`).join("")}
-            </div>`
-          : "";
-
-        const subLine = [item.color, item.finish].filter(Boolean).join(" • ");
-
-        card.innerHTML = `
-          <div class="img" data-gallery="${escapeHtml(item.id)}" data-index="0" data-imgwrap="${escapeHtml(item.id)}">
-            ${hasImgs ? `<img class="photo" src="${escapeHtml(firstSrc)}" alt="${escapeHtml(item.name || "Фото")}">` : ""}
-            ${controls}
-            ${dots}
-            <div class="overlay">
-              <span class="pill">${escapeHtml(item.tag || "")}</span>
-              <span class="pill">#${idx+1}</span>
-            </div>
-          </div>
-          ${inThumbs}
-          <div class="content">
-            <div class="name">${escapeHtml(item.name || "Без названия")}</div>
-            ${subLine ? `<div class="sub">${escapeHtml(subLine)}</div>` : ""}
-            <div class="desc">${escapeHtml(item.desc || "")}</div>
-            <div class="row" style="justify-content:space-between; align-items:center; gap:10px;">
-              <div class="price">
-                <span class="old">${escapeHtml(item.priceOld || "")}</span>
-                <span class="new">${escapeHtml(item.priceNew || "")}</span>
-              </div>
-              <div class="actions ${isAdmin ? "" : "hidden"}">
-                <button class="btn secondary" data-move="up" data-id="${escapeHtml(item.id)}" type="button" title="Переместить выше">↑</button>
-                <button class="btn secondary" data-move="down" data-id="${escapeHtml(item.id)}" type="button" title="Переместить ниже">↓</button>
-                <button class="btn secondary" data-edit="${escapeHtml(item.id)}" type="button">Редактировать</button>
-                <button class="btn danger" data-del="${escapeHtml(item.id)}" type="button">Удалить</button>
-              </div>
-            </div>
-          </div>
-        `;
-
-        card.addEventListener("click", (e)=>{
-          const t = e.target;
-          if(t && (t.closest("button") || t.closest(".actions") || t.closest(".thumb"))) return;
-          selectedCardId = item.id;
-          render();
-        });
-
-        gridEl.appendChild(card);
+        inThumbs = '<div class="in-card-thumbs" data-thumbs="' + escapeHtml(item.id) + '">' + ts.join("") + '</div>';
       }
 
-      bindGridHandlers();
+      var subLine = [];
+      if (item.color) subLine.push(item.color);
+      if (item.finish) subLine.push(item.finish);
+      var subHtml = subLine.length ? '<div class="sub">' + escapeHtml(subLine.join(" • ")) + '</div>' : "";
+
+      card.innerHTML = ''
+        + '<div class="img" data-gallery="' + escapeHtml(item.id) + '" data-index="0" data-imgwrap="' + escapeHtml(item.id) + '">' 
+        + (hasImgs ? '<img class="photo" src="' + escapeHtml(firstSrc) + '" alt="' + escapeHtml(item.name || "Фото") + '">' : "")
+        + controls
+        + dots
+        + '<div class="overlay">'
+        + '<span class="pill">' + escapeHtml(item.tag || "") + '</span>'
+        + '<span class="pill">#' + (idx + 1) + '</span>'
+        + '</div>'
+        + '</div>'
+        + inThumbs
+        + '<div class="content">'
+        + '<div class="name">' + escapeHtml(item.name || "Без названия") + '</div>'
+        + subHtml
+        + '<div class="desc">' + escapeHtml(item.desc || "") + '</div>'
+        + '<div class="price">'
+        + '<span class="old">' + escapeHtml(item.priceOld || "") + '</span>'
+        + '<span class="new">' + escapeHtml(item.priceNew || "") + '</span>'
+        + '</div>'
+        + '</div>';
+
+      card.addEventListener("click", function (id) {
+        return function (e) {
+          var t = e.target;
+          if (t && (t.closest("button") || t.closest(".thumb"))) return;
+          selectedCardId = id;
+          render();
+        };
+      }(item.id));
+
+      gridEl.appendChild(card);
     }
 
-    function bindGridHandlers(){
-      // Галерея стрелками
-      function updateGallery(id, dir){
-        const el = gridEl.querySelector(`[data-gallery="${CSS.escape(id)}"]`);
-        if(!el) return;
+    bindGridHandlers();
+  }
 
-        const item = getItemById(id);
-        if(!item || !Array.isArray(item.images) || item.images.length < 2) return;
+  function bindGridHandlers() {
+    function updateGallery(id, dir) {
+      var el = gridEl.querySelector('[data-gallery="' + CSS.escape(id) + '"]');
+      if (!el) return;
 
-        let i = parseInt(el.getAttribute("data-index") || "0", 10);
-        i = (i + dir + item.images.length) % item.images.length;
-        el.setAttribute("data-index", String(i));
+      var item = getItemById(id);
+      if (!item || !item.images || item.images.length < 2) return;
 
-        const img = el.querySelector("img.photo");
-        if(img) img.src = item.images[i];
+      var i = parseInt(el.getAttribute("data-index") || "0", 10);
+      i = (i + dir + item.images.length) % item.images.length;
+      el.setAttribute("data-index", String(i));
 
-        el.querySelectorAll(".dot").forEach((d, idx)=> d.classList.toggle("active", idx === i));
+      var img = el.querySelector("img.photo");
+      if (img) img.src = item.images[i];
 
-        const thumbsWrap = gridEl.querySelector(`[data-thumbs="${CSS.escape(id)}"]`);
-        if(thumbsWrap){
-          thumbsWrap.querySelectorAll(".in-thumb").forEach(th=>{
-            th.classList.toggle("active", th.getAttribute("data-index") === String(i));
-          });
+      var dots = el.querySelectorAll(".dot");
+      for (var d = 0; d < dots.length; d++) dots[d].classList.toggle("active", d === i);
+
+      var thumbsWrap = gridEl.querySelector('[data-thumbs="' + CSS.escape(id) + '"]');
+      if (thumbsWrap) {
+        var ths = thumbsWrap.querySelectorAll(".in-thumb");
+        for (var t = 0; t < ths.length; t++) {
+          ths[t].classList.toggle("active", ths[t].getAttribute("data-index") === String(i));
         }
       }
-
-      gridEl.querySelectorAll("[data-prev]").forEach(b=>{
-        b.addEventListener("click", (e)=>{ e.stopPropagation(); updateGallery(b.getAttribute("data-prev"), -1); });
-      });
-      gridEl.querySelectorAll("[data-next]").forEach(b=>{
-        b.addEventListener("click", (e)=>{ e.stopPropagation(); updateGallery(b.getAttribute("data-next"), +1); });
-      });
-
-      // Миниатюры: одинарный тап открывает полноэкранно
-      gridEl.querySelectorAll("[data-jump]").forEach(th=>{
-        th.addEventListener("click", (e)=>{
-          e.stopPropagation();
-          const id = th.getAttribute("data-jump");
-          const idx = parseInt(th.getAttribute("data-index") || "0", 10);
-          openLightbox(id, idx);
-        });
-      });
-
-      // Полноэкранный по одинарному тапу/клику по большому фото
-      gridEl.querySelectorAll("[data-imgwrap]").forEach(w=>{
-        w.addEventListener("click", (e)=>{
-          const t = e.target;
-          if(t && t.closest && t.closest("button")) return;
-          e.stopPropagation();
-          const id = w.getAttribute("data-imgwrap");
-          const idx = parseInt(w.getAttribute("data-index") || "0", 10);
-          openLightbox(id, idx);
-        });
-      });
-
-      if(!isAdmin) return;
-
-      // Перемещение карточек ↑ ↓
-      gridEl.querySelectorAll("[data-move]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
-          e.stopPropagation();
-          const dir = btn.getAttribute("data-move");
-          const id = btn.getAttribute("data-id");
-          const list = getActiveList();
-          const i = list.findIndex(x => x.id === id);
-          if(i < 0) return;
-          const j = dir === "up" ? i-1 : i+1;
-          if(j < 0 || j >= list.length) return;
-          const tmp = list[i];
-          list[i] = list[j];
-          list[j] = tmp;
-          setActiveList(list);
-          saveState();
-          render();
-        });
-      });
-      // Удаление
-      gridEl.querySelectorAll("[data-del]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
-          e.stopPropagation();
-          const id = btn.getAttribute("data-del");
-          const list = getActiveList().filter(x => x.id !== id);
-          setActiveList(list);
-          if(selectedCardId === id) selectedCardId = null;
-          saveState();
-          render();
-        });
-      });
-
-      // Редактирование
-      gridEl.querySelectorAll("[data-edit]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
-          e.stopPropagation();
-          const id = btn.getAttribute("data-edit");
-          const item = getItemById(id);
-          if(!item) return;
-
-          editingId = id;
-          editImages = Array.isArray(item.images) ? [...item.images].slice(0, MAX_PHOTOS) : [];
-
-          const meta = [item.name, item.color, item.finish].filter(Boolean).join(" • ");
-          editTitle.textContent = `Редактирование: ${meta || ""}`;
-
-          editName.value = item.name || "";
-          editColor.value = item.color || "";
-          editFinish.value = item.finish || "";
-          editDesc.value = item.desc || "";
-          editPriceNew.value = item.priceNew || "";
-          editPriceOld.value = item.priceOld || "";
-
-          editFilesEl.value = "";
-          refreshEditThumbs();
-          editDialog.showModal();
-        });
-      });
-
-      // Drag&Drop (ПК)
-      gridEl.querySelectorAll("article.card[draggable='true']").forEach(cardEl=>{
-        cardEl.addEventListener("dragstart", (e)=>{
-          dragFromId = cardEl.dataset.dragId || null;
-          try{ e.dataTransfer.setData("text/plain", dragFromId || ""); }catch(_){ }
-          e.dataTransfer.effectAllowed = "move";
-        });
-
-        cardEl.addEventListener("dragover", (e)=>{
-          if(!dragFromId) return;
-          e.preventDefault();
-          e.dataTransfer.dropEffect = "move";
-          cardEl.classList.add("selected");
-        });
-
-        cardEl.addEventListener("dragleave", ()=>{
-          cardEl.classList.remove("selected");
-        });
-
-        cardEl.addEventListener("drop", (e)=>{
-          e.preventDefault();
-          cardEl.classList.remove("selected");
-          const toId = cardEl.dataset.dragId || null;
-          const fromId = dragFromId || (function(){ try{ return e.dataTransfer.getData("text/plain"); }catch(_){ return null; } })();
-          dragFromId = null;
-          if(!fromId || !toId || fromId === toId) return;
-
-          const list = getActiveList();
-          const fromIdx = list.findIndex(x => x.id === fromId);
-          const toIdx = list.findIndex(x => x.id === toId);
-          if(fromIdx < 0 || toIdx < 0) return;
-
-          const moved = list.splice(fromIdx, 1)[0];
-          const insertAt = fromIdx < toIdx ? toIdx - 1 : toIdx;
-          list.splice(insertAt, 0, moved);
-          setActiveList(list);
-          saveState();
-          render();
-        });
-      });
     }
 
-    // tabs
-    tabsEl.forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+    var prevs = gridEl.querySelectorAll("[data-prev]");
+    for (var i = 0; i < prevs.length; i++) {
+      prevs[i].addEventListener("click", function (b) {
+        return function (e) { e.stopPropagation(); updateGallery(b.getAttribute("data-prev"), -1); };
+      }(prevs[i]));
+    }
+
+    var nexts = gridEl.querySelectorAll("[data-next]");
+    for (var j = 0; j < nexts.length; j++) {
+      nexts[j].addEventListener("click", function (b) {
+        return function (e) { e.stopPropagation(); updateGallery(b.getAttribute("data-next"), +1); };
+      }(nexts[j]));
+    }
+
+    // миниатюры: одинарный тап открывает полноэкранный
+    var jumps = gridEl.querySelectorAll("[data-jump]");
+    for (var k = 0; k < jumps.length; k++) {
+      jumps[k].addEventListener("click", function (th) {
+        return function (e) {
+          e.stopPropagation();
+          var id = th.getAttribute("data-jump");
+          var idx = parseInt(th.getAttribute("data-index") || "0", 10);
+          openLightbox(id, idx);
+        };
+      }(jumps[k]));
+    }
+
+    // большое фото: одинарный клик -> полноэкранный
+    var wraps = gridEl.querySelectorAll("[data-imgwrap]");
+    for (var w = 0; w < wraps.length; w++) {
+      wraps[w].addEventListener("click", function (wrap) {
+        return function (e) {
+          var t = e.target;
+          if (t && t.closest && t.closest("button")) return;
+          e.stopPropagation();
+          var id = wrap.getAttribute("data-imgwrap");
+          var idx = parseInt(wrap.getAttribute("data-index") || "0", 10);
+          openLightbox(id, idx);
+        };
+      }(wraps[w]));
+    }
+  }
+
+  function loadAll() {
+    isLoading = true;
+    loadError = "";
+    render();
+
+    var p1 = httpGetJson(sheetUrl(SHEET_INTERIOR));
+    var p2 = httpGetJson(sheetUrl(SHEET_ENTRANCE));
+
+    Promise.all([p1, p2]).then(function (res) {
+      dataInterior = normalizeRows(res[0] || [], "interior");
+      dataEntrance = normalizeRows(res[1] || [], "entrance");
+      isLoading = false;
+      render();
+    }).catch(function (e) {
+      isLoading = false;
+      loadError = (e && e.message) ? e.message : String(e);
+      render();
+    });
+  }
+
+  // tabs
+  for (var i = 0; i < tabsEl.length; i++) {
+    tabsEl[i].addEventListener("click", function (btn) {
+      return function () {
         activeTab = btn.dataset.tab;
         selectedCardId = null;
-        saveState();
+        for (var j = 0; j < tabsEl.length; j++) {
+          var isActive = tabsEl[j].dataset.tab === activeTab;
+          tabsEl[j].classList.toggle("active", isActive);
+          tabsEl[j].setAttribute("aria-selected", isActive ? "true" : "false");
+        }
         render();
-      });
-    });
-
-    // admin login/logout
-    adminBtn.addEventListener("click", ()=>{
-      if(isAdmin){
-        isAdmin = false;
-        sessionStorage.removeItem("doors_admin");
-        adminBtnVisible = false;
-        render();
-        return;
-      }
-
-      const p = prompt("Введите пароль администратора:");
-      if(p === null) return;
-      if(p === ADMIN_PASSWORD){
-        isAdmin = true;
-        sessionStorage.setItem("doors_admin", "1");
-        render();
-      }else{
-        alert("Неверный пароль");
-      }
-    });
-
-    // Показать кнопку «Войти как админ»: 7 быстрых тапов по заголовку (за 3 секунды)
-    let titleTapCount = 0;
-    let titleTapTimer = null;
-
-    function revealAdminButton(){
-      adminBtnVisible = true;
-      render();
-    }
-
-    siteTitle.addEventListener("click", ()=>{
-      if(adminBtnVisible || isAdmin) return;
-      titleTapCount++;
-      clearTimeout(titleTapTimer);
-      titleTapTimer = setTimeout(()=>{ titleTapCount = 0; }, 3000);
-      if(titleTapCount >= 7){
-        titleTapCount = 0;
-        revealAdminButton();
-      }
-    });
-
-    // Снятие выделения кликом по пустому месту
-    document.addEventListener("click", (ev)=>{
-      if(lightbox && !lightbox.classList.contains("hidden")) return;
-      const within = ev.target && ev.target.closest && ev.target.closest(".card");
-      if(!within && selectedCardId !== null){
-        selectedCardId = null;
-        render();
-      }
-    });
-
-    // add images
-    addFilesEl.addEventListener("change", async ()=>{
-      if(!isAdmin) return;
-      try{
-        const remaining = MAX_PHOTOS - pendingAddImages.length;
-        const { out, skipped } = await readFilesCompressedWithLimit(addFilesEl.files, remaining);
-        pendingAddImages.push(...out);
-        pendingAddImages = pendingAddImages.slice(0, MAX_PHOTOS);
-        addFilesEl.value = "";
-        if(skipped > 0) alert(`Можно максимум ${MAX_PHOTOS} фото. Лишние файлы (${skipped}) не добавлены.`);
-        render();
-      }catch(_){
-        alert("Не удалось загрузить/сжать фото");
-      }
-    });
-
-    // add item
-    addBtn.addEventListener("click", ()=>{
-      if(!isAdmin){
-        alert("Добавление доступно только в режиме администратора.");
-        return;
-      }
-
-      const name = nameEl.value.trim();
-      const color = colorEl.value.trim();
-      const finish = finishEl.value.trim();
-      const priceNew = priceNewEl.value.trim();
-      const priceOld = priceOldEl.value.trim();
-      const desc = descEl.value.trim();
-      const images = [...pendingAddImages].slice(0, MAX_PHOTOS);
-
-      if(!name){
-        nameEl.focus();
-        nameEl.style.boxShadow = "0 0 0 2px rgba(255,90,106,.35)";
-        setTimeout(()=> nameEl.style.boxShadow = "", 700);
-        return;
-      }
-
-      const newItem = {
-        id: uid(),
-        name,
-        color,
-        finish,
-        priceNew,
-        priceOld,
-        desc,
-        tag: activeTab === "interior" ? "Межкомн." : "Входная",
-        images
       };
+    }(tabsEl[i]));
+  }
 
-      const list = getActiveList();
-      list.unshift(newItem);
-      setActiveList(list);
+  // поиск
+  if (searchPublicEl) {
+    searchPublicEl.addEventListener("input", function () { render(); });
+  }
 
-      nameEl.value = "";
-      colorEl.value = "";
-      finishEl.value = "";
-      priceNewEl.value = "";
-      priceOldEl.value = "";
-      descEl.value = "";
-      pendingAddImages = [];
-      searchEl.value = "";
-      searchPublicEl.value = "";
-
-      saveState();
-      render();
-    });
-
-    // search
-    searchEl.addEventListener("input", render);
-    searchPublicEl.addEventListener("input", render);
-
-    // reset / clear
-    resetBtn.addEventListener("click", ()=>{
-      if(!isAdmin){
-        alert("Сброс доступен только в режиме администратора.");
-        return;
-      }
-      const fresh = defaultState();
-      fresh.activeTab = activeTab;
-      state = fresh;
-      saveState();
-      pendingAddImages = [];
+  // снять выделение кликом по пустому месту
+  document.addEventListener("click", function (ev) {
+    if (lightbox && !lightbox.classList.contains("hidden")) return;
+    var within = ev.target && ev.target.closest ? ev.target.closest(".card") : null;
+    if (!within && selectedCardId !== null) {
       selectedCardId = null;
       render();
-    });
-
-    clearBtn.addEventListener("click", ()=>{
-      if(!isAdmin){
-        alert("Очистка доступна только в режиме администратора.");
-        return;
-      }
-      setActiveList([]);
-      saveState();
-      selectedCardId = null;
-      render();
-    });
-
-    // edit dialog
-    editClose.addEventListener("click", ()=> editDialog.close());
-    editCancel.addEventListener("click", ()=> editDialog.close());
-
-    editDialog.addEventListener("close", ()=>{
-      editingId = null;
-      editImages = [];
-      editThumbsEl.innerHTML = "";
-      editFilesEl.value = "";
-    });
-
-    editFilesEl.addEventListener("change", async ()=>{
-      if(!isAdmin) return;
-      try{
-        const remaining = MAX_PHOTOS - editImages.length;
-        const { out, skipped } = await readFilesCompressedWithLimit(editFilesEl.files, remaining);
-        editImages.push(...out);
-        editImages = editImages.slice(0, MAX_PHOTOS);
-        editFilesEl.value = "";
-        if(skipped > 0) alert(`Можно максимум ${MAX_PHOTOS} фото. Лишние файлы (${skipped}) не добавлены.`);
-        refreshEditThumbs();
-      }catch(_){
-        alert("Не удалось загрузить/сжать фото");
-      }
-    });
-
-    editSave.addEventListener("click", ()=>{
-      if(!isAdmin || !editingId) return;
-
-      const item = getItemById(editingId);
-      if(!item) return;
-
-      item.name = (editName.value || "").trim();
-      item.color = (editColor.value || "").trim();
-      item.finish = (editFinish.value || "").trim();
-      item.desc = (editDesc.value || "").trim();
-      item.priceNew = (editPriceNew.value || "").trim();
-      item.priceOld = (editPriceOld.value || "").trim();
-      item.images = [...editImages].slice(0, MAX_PHOTOS);
-
-      saveState();
-      editDialog.close();
-      render();
-    });
-
-    // ---- Mini tests (console) ----
-    function assert(cond, msg){
-      if(!cond) throw new Error("TEST FAIL: " + msg);
     }
+  });
 
-    function runTests(){
-      const clamped = ["1","2","3","4","5","6"].slice(0, MAX_PHOTOS);
-      assert(clamped.length === MAX_PHOTOS, "Clamp to MAX_PHOTOS");
+  // ===== Самотесты (в консоли), чтобы ловить ошибки сразу =====
+  function assert(cond, msg) { if (!cond) throw new Error("TEST FAILED: " + msg); }
+  function runSelfTests() {
+    var a = parsePhotos("a.jpg,b.jpg\nc.jpg");
+    assert(a.length === 3, "parsePhotos: split по запятой и переносу строки");
+    var b = parsePhotos("  x.jpg  ,   ");
+    assert(b.length === 1 && b[0] === "x.jpg", "parsePhotos: trim и игнор пустых");
+    var c = CSS.escape('a"b');
+    assert(typeof c === "string" && c !== 'a"b', "CSS.escape: экранирует спецсимволы");
+    // eslint-disable-next-line no-console
+    console.log("Self-tests: OK");
+  }
 
-      const cov = makeCover(["a","b","c"], 2);
-      assert(cov[0] === "c" && cov.length === 3, "makeCover moves selected to front");
+  // init
+  for (var jj = 0; jj < tabsEl.length; jj++) {
+    var isActive = tabsEl[jj].dataset.tab === activeTab;
+    tabsEl[jj].classList.toggle("active", isActive);
+    tabsEl[jj].setAttribute("aria-selected", isActive ? "true" : "false");
+  }
 
-      const itm = { name:"A", color:"Белый", finish:"Экошпон", desc:"", priceNew:"", priceOld:"" };
-      const q = "экош";
-      const ok = (itm.name+" "+itm.color+" "+itm.finish+" "+itm.desc+" "+itm.priceNew+" "+itm.priceOld).toLowerCase().includes(q);
-      assert(ok === true, "Search matches finish");
-
-      const a = [{id:"1"},{id:"2"},{id:"3"}];
-      const i=1,j=2; const t=a[i]; a[i]=a[j]; a[j]=t;
-      assert(a.map(x=>x.id).join(",") === "1,3,2", "Swap move works");
-
-      assert(typeof uid() === "string" && uid().length > 6, "uid() returns a string");
-
-      console.log("✅ tests ok");
-    }
-
-    // init
-    activeTab = state.activeTab || "interior";
-    render();
-    try{ runTests(); }catch(e){ console.warn(e); }
+  runSelfTests();
+  loadAll();
   </script>
 </body>
 </html>
