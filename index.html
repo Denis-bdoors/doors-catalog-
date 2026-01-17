@@ -221,10 +221,34 @@
   }
 
   function httpGetJson(url) {
-    if (window.fetch) {
-      return fetch(url, { cache: "no-store" }).then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
+  return fetch(url, { cache: "no-store" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    })
+    .then(function (txt) {
+      // Google gviz возвращает не чистый JSON, а обёртку.
+      // Нужно вытащить JSON из строки.
+      var start = txt.indexOf("{");
+      var end = txt.lastIndexOf("}");
+      if (start === -1 || end === -1) throw new Error("GVIZ parse error");
+      var json = JSON.parse(txt.slice(start, end + 1));
+
+      // превращаем таблицу в массив объектов по заголовкам
+      var cols = json.table.cols.map(function (c) { return c.label; });
+      var rows = json.table.rows;
+
+      var out = [];
+      for (var i = 0; i < rows.length; i++) {
+        var obj = {};
+        for (var j = 0; j < cols.length; j++) {
+          var key = cols[j];
+          var cell = rows[i].c[j];
+          obj[key] = cell && cell.v != null ? String(cell.v) : "";
+        }
+        out.push(obj);
+      }
+      return out;
       });
     }
     return new Promise(function (resolve, reject) {
@@ -243,7 +267,13 @@
   }
 
   function sheetUrl(sheetName) {
-    return "https://opensheet.elk.sh/" + encodeURIComponent(SHEET_ID) + "/" + encodeURIComponent(sheetName);
+  // Google Visualization API (работает стабильно во всех браузерах)
+  // ВАЖНО: листы должны называться interior и entrance
+  var base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID) + "/gviz/tq?";
+  var tq = "tq=" + encodeURIComponent("select *");
+  var gid = "";
+  // если у вас разные gid, можно настроить, но проще оставить по названию листа через sheet=
+  return base + "sheet=" + encodeURIComponent(sheetName) + "&" + tq;
   }
 
   // UI
