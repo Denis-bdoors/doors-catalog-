@@ -37,26 +37,14 @@
     .tab.active{background: rgba(106,163,255,.18); color:var(--text); box-shadow: inset 0 0 0 1px rgba(106,163,255,.35);}
 
     .panel{background: rgba(255,255,255,.03); border:1px solid var(--border); border-radius:var(--radius); padding:12px; box-shadow: var(--shadow); width:100%;}
-    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .row > *{flex:1}
-    .field{display:flex; flex-direction:column; gap:6px; min-width:160px;}
-    label{font-size:12px; color:var(--muted)}
-    input{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background: rgba(0,0,0,.18); color: var(--text); outline:none;}
-
-    .btn{border:0; cursor:pointer; padding:10px 12px; border-radius:12px; background: rgba(106,163,255,.18); color: var(--text); font-weight:800; box-shadow: inset 0 0 0 1px rgba(106,163,255,.35); white-space:nowrap;}
-    .btn:active{transform:translateY(1px)}
-    .btn.secondary{background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.10); color: var(--text); font-weight:750;}
-    .btn.danger{background: rgba(255,90,106,.16); box-shadow: inset 0 0 0 1px rgba(255,90,106,.35);}
-
     .meta{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin:14px 0 10px;}
     .badge{padding:6px 10px; border-radius:999px; border:1px solid var(--border); background: rgba(255,255,255,.03); color:var(--muted); font-size:12px;}
     .search{display:flex; gap:10px; align-items:center; flex:1; justify-content:flex-end; min-width:260px;}
+    input{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background: rgba(0,0,0,.18); color: var(--text); outline:none;}
 
     .grid{display:grid; gap:var(--gap); grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top:12px;}
     .card{background: rgba(255,255,255,.03); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column; min-height:220px; cursor:pointer;}
     .card.selected{border-color: rgba(106,163,255,.55); box-shadow: 0 0 0 2px rgba(106,163,255,.22), var(--shadow);}
-
-    .hidden{display:none!important}
 
     .img{position:relative; aspect-ratio:4/3; background:
         linear-gradient(135deg, rgba(106,163,255,.35), rgba(51,212,157,.20)),
@@ -73,10 +61,7 @@
     .img .dot{width:7px; height:7px; border-radius:999px; background: rgba(255,255,255,.35); border:1px solid rgba(0,0,0,.25);}
     .img .dot.active{background: rgba(255,255,255,.85);}
 
-    /* Миниатюры внутри выбранной карточки */
     .in-card-thumbs{display:flex; gap:8px; padding:10px; border-bottom:1px solid var(--border); overflow:auto; background: rgba(0,0,0,.10)}
-    .in-card-thumbs::-webkit-scrollbar{height:8px}
-    .in-card-thumbs::-webkit-scrollbar-thumb{background: rgba(255,255,255,.10); border-radius:999px}
     .in-thumb{flex:0 0 auto; width:56px; height:56px; border-radius:12px; border:1px solid rgba(255,255,255,.10); overflow:hidden; background: rgba(0,0,0,.2)}
     .in-thumb img{width:100%; height:100%; object-fit:cover; display:block}
     .in-thumb.active{border-color: rgba(106,163,255,.7); box-shadow: 0 0 0 2px rgba(106,163,255,.20)}
@@ -85,14 +70,10 @@
     .name{font-weight:900; line-height:1.25}
     .sub{color:var(--muted); font-size:12.5px; line-height:1.35}
     .desc{color:var(--muted); font-size:12.5px; line-height:1.35; flex:1}
-
     .price{font-weight:900; display:flex; flex-wrap:wrap; gap:8px; align-items:baseline}
     .price .old{color:var(--muted); text-decoration:line-through; font-weight:800; font-size:12.5px}
     .price .new{font-weight:950}
-    .price .new:empty{display:none}
-    .price .old:empty{display:none}
 
-    /* Lightbox */
     .lightbox{position:fixed; inset:0; z-index:9999; background: rgba(0,0,0,.78); display:flex; align-items:center; justify-content:center; padding:14px;}
     .lightbox.hidden{display:none}
     .lb-inner{width:min(1100px, 96vw); height:min(84vh, 760px); position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,.12);
@@ -109,8 +90,6 @@
     .lb-thumbs{position:absolute; left:0; right:0; bottom:0; padding:10px; display:flex; gap:8px; overflow:auto; background: linear-gradient(to top, rgba(0,0,0,.55), transparent);
       z-index:2;
     }
-    .lb-thumbs::-webkit-scrollbar{height:8px}
-    .lb-thumbs::-webkit-scrollbar-thumb{background: rgba(255,255,255,.12); border-radius:999px}
     .lb-t{flex:0 0 auto; width:56px; height:56px; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.25); cursor:pointer}
     .lb-t img{width:100%; height:100%; object-fit:cover; display:block}
     .lb-t.active{border-color: rgba(106,163,255,.75); box-shadow: 0 0 0 2px rgba(106,163,255,.18)}
@@ -135,14 +114,8 @@
       <div class="tabs" role="tablist" aria-label="Вкладки каталога">
         <button class="tab active" data-tab="interior" role="tab" aria-selected="true">Межкомнатные</button>
         <button class="tab" data-tab="entrance" role="tab" aria-selected="false">Входные</button>
-        <button class="btn secondary hidden" id="adminBtn" type="button" style="padding:10px 14px; border-radius:999px;">Войти как админ</button>
-        <span class="badge hidden" id="adminBadge">Режим администратора</span>
       </div>
     </header>
-
-    <div class="panel hidden" id="adminPanel">
-      <!-- Админ-панель оставлена в коде, но в варианте №2 она скрыта -->
-    </div>
 
     <div class="panel" id="publicSearchPanel" style="margin-top:12px;">
       <div class="meta" style="margin:0;">
@@ -175,16 +148,24 @@
   </div>
 
   <script>
-  // ====== НАСТРОЙКА: Google Sheets через OpenSheet ======
+  // ====== НАСТРОЙКА: Google Sheets ======
   var SHEET_ID = "1hhYlP9kbLOeUBtu2Amfe8Fs8py-yP_uXBKaqQU7bLwY";
   var SHEET_INTERIOR = "interior";
   var SHEET_ENTRANCE = "entrance";
+
+  // Путь к фото на вашем GitHub Pages (если в таблице указано images/01.jpg или 01.jpg)
+  var IMAGE_BASE = (function(){
+    var p = location.pathname;
+    // /doors-catalog-/index.html -> /doors-catalog-/
+    p = p.replace(/index\\.html.*$/i, "");
+    if (!p.endsWith("/")) p += "/";
+    return location.origin + p;
+  })();
 
   // ===== Совместимость =====
   if (!window.CSS) window.CSS = {};
   if (!CSS.escape) {
     CSS.escape = function (value) {
-      // ВАЖНО: двойной слэш, чтобы строка стала "\$&" (иначе экранирование не работает корректно)
       return String(value).replace(/[^a-zA-Z0-9_\-]/g, "\\$&");
     };
   }
@@ -198,17 +179,24 @@
       .replace(/'/g, "&#039;");
   }
 
-  // ВАЖНО: без регэкспа, чтобы никогда не ломалось переносами строки.
+  // Без split(/.../) — чтобы не ловить "missing /" вообще никогда
   function parsePhotos(value) {
     if (!value) return [];
     var s = String(value);
-    // заменяем переносы на запятые, затем сплит
     s = s.replace(/\r\n|\r|\n/g, ",");
     var parts = s.split(",");
     var out = [];
     for (var i = 0; i < parts.length; i++) {
       var u = (parts[i] || "").trim();
       if (!u) continue;
+
+      // делаем абсолютные ссылки, если в таблице указано "images/01.jpg" или "01.jpg"
+      if (!/^https?:\/\//i.test(u)) {
+        if (u.startsWith("/")) u = u.slice(1);
+        if (!u.startsWith("images/")) u = "images/" + u;
+        u = IMAGE_BASE + u;
+      }
+
       out.push(u);
       if (out.length >= 5) break;
     }
@@ -220,60 +208,62 @@
     return isNaN(n) ? fallback : n;
   }
 
-  function httpGetJson(url) {
-  return fetch(url, { cache: "no-store" })
-    .then(function (r) {
+  function fetchJson(url) {
+    return fetch(url, { cache: "no-store" }).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.text();
-    })
-    .then(function (txt) {
-      // Google gviz возвращает не чистый JSON, а обёртку.
-      // Нужно вытащить JSON из строки.
-      var start = txt.indexOf("{");
-      var end = txt.lastIndexOf("}");
-      if (start === -1 || end === -1) throw new Error("GVIZ parse error");
-      var json = JSON.parse(txt.slice(start, end + 1));
-
-      // превращаем таблицу в массив объектов по заголовкам
-      var cols = json.table.cols.map(function (c) { return c.label; });
-      var rows = json.table.rows;
-
-      var out = [];
-      for (var i = 0; i < rows.length; i++) {
-        var obj = {};
-        for (var j = 0; j < cols.length; j++) {
-          var key = cols[j];
-          var cell = rows[i].c[j];
-          obj[key] = cell && cell.v != null ? String(cell.v) : "";
-        }
-        out.push(obj);
-      }
-      return out;
-      });
-    }
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState !== 4) return;
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try { resolve(JSON.parse(xhr.responseText)); } catch (e) { reject(e); }
-        } else {
-          reject(new Error("HTTP " + xhr.status));
-        }
-      };
-      xhr.send(null);
+      return r.json();
     });
   }
 
-  function sheetUrl(sheetName) {
-  // Google Visualization API (работает стабильно во всех браузерах)
-  // ВАЖНО: листы должны называться interior и entrance
-  var base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID) + "/gviz/tq?";
-  var tq = "tq=" + encodeURIComponent("select *");
-  var gid = "";
-  // если у вас разные gid, можно настроить, но проще оставить по названию листа через sheet=
-  return base + "sheet=" + encodeURIComponent(sheetName) + "&" + tq;
+  // 1) OpenSheet (быстро, но иногда недоступен)
+  function urlOpenSheet(sheetName) {
+    return "https://opensheet.elk.sh/" + encodeURIComponent(SHEET_ID) + "/" + encodeURIComponent(sheetName);
+  }
+
+  // 2) Google GVIZ (резерв)
+  function urlGViz(sheetName) {
+    // headers=1 => первая строка как заголовки
+    return "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID)
+      + "/gviz/tq?tqx=out:json&headers=1&sheet=" + encodeURIComponent(sheetName)
+      + "&tq=" + encodeURIComponent("select *");
+  }
+
+  function fetchGVizAsObjects(sheetName) {
+    return fetch(urlGViz(sheetName), { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+      })
+      .then(function (txt) {
+        // txt: google.visualization.Query.setResponse({...});
+        var start = txt.indexOf("{");
+        var end = txt.lastIndexOf("}");
+        if (start === -1 || end === -1) throw new Error("GVIZ parse error");
+        var json = JSON.parse(txt.slice(start, end + 1));
+        var cols = (json.table && json.table.cols) ? json.table.cols.map(function (c) { return c.label; }) : [];
+        var rows = (json.table && json.table.rows) ? json.table.rows : [];
+        var out = [];
+        for (var i = 0; i < rows.length; i++) {
+          var obj = {};
+          for (var j = 0; j < cols.length; j++) {
+            var key = cols[j];
+            var cell = rows[i].c[j];
+            obj[key] = cell && cell.v != null ? String(cell.v) : "";
+          }
+          // пропускаем полностью пустые строки
+          var any = false;
+          for (var k in obj) { if (Object.prototype.hasOwnProperty.call(obj, k) && String(obj[k]).trim()) { any = true; break; } }
+          if (any) out.push(obj);
+        }
+        return out;
+      });
+  }
+
+  function fetchSheet(sheetName) {
+    // сначала пробуем OpenSheet, если не получилось — GVIZ
+    return fetchJson(urlOpenSheet(sheetName)).catch(function(){
+      return fetchGVizAsObjects(sheetName);
+    });
   }
 
   // UI
@@ -281,14 +271,6 @@
   var gridEl = document.getElementById("grid");
   var countBadgePublic = document.getElementById("countBadgePublic");
   var searchPublicEl = document.getElementById("searchPublic");
-
-  // Hide admin UI (вариант №2)
-  var adminBtn = document.getElementById("adminBtn");
-  var adminBadge = document.getElementById("adminBadge");
-  var adminPanel = document.getElementById("adminPanel");
-  if (adminBtn) adminBtn.classList.add("hidden");
-  if (adminBadge) adminBadge.classList.add("hidden");
-  if (adminPanel) adminPanel.classList.add("hidden");
 
   // Lightbox
   var lightbox = document.getElementById("lightbox");
@@ -353,10 +335,7 @@
   function renderLightbox() {
     var item = lbCardId ? getItemById(lbCardId) : null;
     var imgs = item && item.images ? item.images : [];
-    if (!imgs.length) {
-      closeLightbox();
-      return;
-    }
+    if (!imgs.length) { closeLightbox(); return; }
 
     lbIndex = (lbIndex + imgs.length) % imgs.length;
     lbImg.src = imgs[lbIndex];
@@ -376,11 +355,7 @@
         var t = document.createElement("div");
         t.className = "lb-t" + (ii === lbIndex ? " active" : "");
         t.innerHTML = '<img src="' + escapeHtml(imgs[ii]) + '" alt="">';
-        t.addEventListener("click", function (e) {
-          e.stopPropagation();
-          lbIndex = ii;
-          renderLightbox();
-        });
+        t.addEventListener("click", function (e) { e.stopPropagation(); lbIndex = ii; renderLightbox(); });
         lbThumbs.appendChild(t);
       })(i);
     }
@@ -447,10 +422,7 @@
       });
     }
 
-    list.sort(function (a, b) {
-      return (a._order || 0) - (b._order || 0);
-    });
-
+    list.sort(function (a, b) { return (a._order || 0) - (b._order || 0); });
     return list;
   }
 
@@ -604,7 +576,6 @@
       }(nexts[j]));
     }
 
-    // миниатюры: одинарный тап открывает полноэкранный
     var jumps = gridEl.querySelectorAll("[data-jump]");
     for (var k = 0; k < jumps.length; k++) {
       jumps[k].addEventListener("click", function (th) {
@@ -617,7 +588,6 @@
       }(jumps[k]));
     }
 
-    // большое фото: одинарный клик -> полноэкранный
     var wraps = gridEl.querySelectorAll("[data-imgwrap]");
     for (var w = 0; w < wraps.length; w++) {
       wraps[w].addEventListener("click", function (wrap) {
@@ -638,10 +608,10 @@
     loadError = "";
     render();
 
-    var p1 = httpGetJson(sheetUrl(SHEET_INTERIOR));
-    var p2 = httpGetJson(sheetUrl(SHEET_ENTRANCE));
-
-    Promise.all([p1, p2]).then(function (res) {
+    Promise.all([
+      fetchSheet(SHEET_INTERIOR),
+      fetchSheet(SHEET_ENTRANCE)
+    ]).then(function (res) {
       dataInterior = normalizeRows(res[0] || [], "interior");
       dataEntrance = normalizeRows(res[1] || [], "entrance");
       isLoading = false;
@@ -653,7 +623,6 @@
     });
   }
 
-  // tabs
   for (var i = 0; i < tabsEl.length; i++) {
     tabsEl[i].addEventListener("click", function (btn) {
       return function () {
@@ -669,12 +638,10 @@
     }(tabsEl[i]));
   }
 
-  // поиск
   if (searchPublicEl) {
     searchPublicEl.addEventListener("input", function () { render(); });
   }
 
-  // снять выделение кликом по пустому месту
   document.addEventListener("click", function (ev) {
     if (lightbox && !lightbox.classList.contains("hidden")) return;
     var within = ev.target && ev.target.closest ? ev.target.closest(".card") : null;
@@ -684,24 +651,13 @@
     }
   });
 
-  // ===== Самотесты (в консоли), чтобы ловить ошибки сразу =====
+  // Самотесты
   function assert(cond, msg) { if (!cond) throw new Error("TEST FAILED: " + msg); }
   function runSelfTests() {
-    var a = parsePhotos("a.jpg,b.jpg\nc.jpg");
-    assert(a.length === 3, "parsePhotos: split по запятой и переносу строки");
-    var b = parsePhotos("  x.jpg  ,   ");
-    assert(b.length === 1 && b[0] === "x.jpg", "parsePhotos: trim и игнор пустых");
-    var c = CSS.escape('a"b');
-    assert(typeof c === "string" && c !== 'a"b', "CSS.escape: экранирует спецсимволы");
-    // eslint-disable-next-line no-console
+    var a = parsePhotos("images/a.jpg, images/b.jpg\nimages/c.jpg");
+    assert(a.length === 3, "parsePhotos: split по запятой и переносам");
+    assert(/^https?:\/\//.test(a[0]), "parsePhotos: делает абсолютные ссылки");
     console.log("Self-tests: OK");
-  }
-
-  // init
-  for (var jj = 0; jj < tabsEl.length; jj++) {
-    var isActive = tabsEl[jj].dataset.tab === activeTab;
-    tabsEl[jj].classList.toggle("active", isActive);
-    tabsEl[jj].setAttribute("aria-selected", isActive ? "true" : "false");
   }
 
   runSelfTests();
